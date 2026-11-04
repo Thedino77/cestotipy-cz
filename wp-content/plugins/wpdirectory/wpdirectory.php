@@ -590,7 +590,7 @@ if ($options['hide_blocks'] == 1) {
 		  global $options;
 		  $hide = '';
 
-			if ( current_user_can('level_7') ) {
+			if ( current_user_can('edit_others_posts') ) {
 				$hide = '
 <style type="text/css">
 #categorychecklist {height: '.$options['cat_block_height'].'px !important}
@@ -634,7 +634,7 @@ if ($options['hide_blocks'] == 1) {
 		  global $options;
 		  $hide = '';
 
-			if ( current_user_can('level_7') ) {
+			if ( current_user_can('edit_others_posts') ) {
 				$hide = '
 <style type="text/css">
 div.ui-tabs-panel {height: '.$options['cat_block_height'].'px !important}
@@ -712,7 +712,7 @@ function clear_fields() {
 
 	if ($options['hide_blocks'] == 1) {
 
-		if ( !current_user_can('level_7') ) {
+		if ( !current_user_can('edit_others_posts') ) {
 
 			if (isset($_POST['excerpt'])) $_POST['excerpt'] = '';
 			if (isset($_POST['trackback_url'])) $_POST['trackback_url'] = '';
@@ -837,7 +837,7 @@ if ($options['kinderloss'] == 1) {
 //thanks to "Manage Your Posts Only" plugin - http://code.mincus.com/41/manage-your-posts-only-in-wordpress/
 function mypo_parse_query_useronly( $wp_query ) {
     if ( strpos( $_SERVER[ 'REQUEST_URI' ], '/wp-admin/edit.php' ) !== false ) {
-        if ( !current_user_can( 'level_7' ) ) {
+        if ( !current_user_can('edit_others_posts') ) {
             global $current_user;
             $wp_query->set( 'author', $current_user->id );
         }
@@ -861,7 +861,7 @@ if ($options['publish_terms'] == 1) {
 			$publishTerms .= $options['publish_terms_text'];
 			$publishTerms .="</div>";
 
-			if (!current_user_can('level_7')) {
+			if (!current_user_can('edit_others_posts')) {
 				echo $publishTerms;
 			}
 		}
@@ -873,7 +873,7 @@ if ($options['publish_terms'] == 1) {
 
 function restrict_dashboard_screens() {
 	if ( ((strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/edit-comments.php')) or (strpos($_SERVER['SCRIPT_NAME'], 'wp-admin/comment.php')))) {
-		if (!current_user_can('level_7')) {
+		if (!current_user_can('edit_others_posts')) {
 			echo "<div class='wrap'><h2>" . __('Restricted area', 'wpDirectory'). "</h2><a href='javascript:history.go(-1)'>&laquo; " . __('go back', 'wpDirectory'). "</a></div>";
 			die();
 		}
@@ -1145,7 +1145,7 @@ echo '
 
 function wpdirectory_options_page() {
   if (function_exists('add_options_page')) {
-  	add_options_page('wpDirectory', 'wpDirectory', 8, __FILE__, 'wpdirectory_options');
+  	add_options_page('wpDirectory', 'wpDirectory', 'manage_options', __FILE__, 'wpdirectory_options');
 	}
 }
 

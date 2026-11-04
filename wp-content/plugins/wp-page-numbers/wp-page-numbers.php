@@ -202,6 +202,7 @@ function wp_page_numbers($start = "", $end = "")
 	
 	$pagingString = "<div id='wp_page_numbers'>\n";
 	$pagingString .= '<ul>';
+	$pagingMiddleString = '';
 	
 	if($page_of_page != "no")
 		$pagingString .= wp_page_numbers_page_of_page($max_page, $paged, $page_of_page_text, $page_of_of);
@@ -584,7 +585,7 @@ function wp_page_numbers_settings()
 }
 
 function wp_page_numbers_add_to_menu() {
-    add_submenu_page('options-general.php', 'WP Page Numbers Options', 'Page Numbers', 10, __FILE__, 'wp_page_numbers_settings');
+    add_submenu_page('options-general.php', 'WP Page Numbers Options', 'Page Numbers', 'manage_options', __FILE__, 'wp_page_numbers_settings');
 }
 add_action('admin_menu', 'wp_page_numbers_add_to_menu');
 ?>

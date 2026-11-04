@@ -11,7 +11,7 @@ Description: Display the most recent comments or trackbacks with your own format
 
 */
 
-if ( function_exists("is_plugin_page") && is_plugin_page() ) {
+if ( isset( $GLOBALS['plugin_page'] ) ) {
 	kjgrc_options_page(); 
 	return;
 }
@@ -821,7 +821,7 @@ function kjgrc_options_page ()
 
 function kjgrc_add_options_page() 
 {
-	add_options_page('Get Recent Comments Plugin', 'Recent Comments', 8, 'get-recent-comments.php','kjgrc_options_page');
+	add_options_page('Get Recent Comments Plugin', 'Recent Comments', 'manage_options', 'get-recent-comments.php','kjgrc_options_page');
 }
 
 function kjgrc_get_exclude_cat ()
@@ -1549,7 +1549,7 @@ function kjgrc_excerpt ($text,$chars_per_comment,$chars_per_word,$tag,$output)
 }
 
 function widget_kj_get_recent_comments_init() {
-	if (! function_exists("register_sidebar_widget")) {
+	if (! function_exists("wp_register_sidebar_widget")) {
 		return;
 	}
 	function widget_get_recent_comments($args) {
@@ -1569,12 +1569,12 @@ function widget_kj_get_recent_comments_init() {
 		echo '<input type="hidden" id="get_recent_comments-submit" name="get_recent_comments-submit" value="1" />';
 		echo 'More options are on the <a href="options-general.php?page=get-recent-comments.php&amp;subpage=1">plugin page</a>.';
 	}
-	register_sidebar_widget('Get Recent Comments', 'widget_get_recent_comments');
-	register_widget_control('Get Recent Comments', 'widget_get_recent_comments_control', 300, 100);
+	wp_register_sidebar_widget('get-recent-comments', 'Get Recent Comments', 'widget_get_recent_comments');
+	wp_register_widget_control('get-recent-comments', 'Get Recent Comments', 'widget_get_recent_comments_control', array('width' => 300, 'height' => 100));
 }
 
 function widget_kj_get_recent_trackbacks_init() {
-	if (! function_exists("register_sidebar_widget")) {
+	if (! function_exists("wp_register_sidebar_widget")) {
 		return;
 	}
 	function widget_get_recent_trackbacks($args) {
@@ -1595,8 +1595,8 @@ function widget_kj_get_recent_trackbacks_init() {
 		echo 'More options are on the <a href="options-general.php?page=get-recent-comments.php&amp;subpage=2">plugin page</a>.';
 	}
 	
-	register_sidebar_widget('Get Recent Trackbacks', 'widget_get_recent_trackbacks');
-	register_widget_control('Get Recent Trackbacks', 'widget_get_recent_trackbacks_control', 300, 100);
+	wp_register_sidebar_widget('get-recent-trackbacks', 'Get Recent Trackbacks', 'widget_get_recent_trackbacks');
+	wp_register_widget_control('get-recent-trackbacks', 'Get Recent Trackbacks', 'widget_get_recent_trackbacks_control', array('width' => 300, 'height' => 100));
 }
 
 add_action('admin_menu', 'kjgrc_add_options_page');
