@@ -525,7 +525,7 @@ function save_index_entries ($utf8=false, $use_stemmer='false', $batch=100, $cjk
 	// in batches to conserve memory
 	while ($posts = $wpdb->get_results("SELECT `ID`, `post_title`, `post_content`, `post_type` FROM $wpdb->posts LIMIT $start, $batch", ARRAY_A)) {
 		reset($posts);
-		while (list($dummy, $post) = each($posts)) {
+		foreach ($posts as $dummy => $post) {
 			if ($post['post_type'] === 'revision') continue;
 			$content = sp_get_post_terms($post['post_content'], $utf8, $use_stemmer, $cjk);
 			$title = sp_get_title_terms($post['post_title'], $utf8, $use_stemmer, $cjk);

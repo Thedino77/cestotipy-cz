@@ -49,9 +49,9 @@ class ItalianStemmer {
 	var $ante_suff_b = array('ar','er','ir');
 
 	function __construct() {
-      usort($this->suffissi_step_0,create_function('$a,$b','return strlen($a)>strlen($b) ? -1 : 1;'));
-		usort($this->suffissi_step_1_a,create_function('$a,$b','return strlen($a)>strlen($b) ? -1 : 1;'));
-		usort($this->suffissi_step_2,create_function('$a,$b','return strlen($a)>strlen($b) ? -1 : 1;'));
+      usort($this->suffissi_step_0,function ($a, $b) { return strlen($a) > strlen($b) ? -1 : 1; });
+		usort($this->suffissi_step_1_a,function ($a, $b) { return strlen($a) > strlen($b) ? -1 : 1; });
+		usort($this->suffissi_step_2,function ($a, $b) { return strlen($a) > strlen($b) ? -1 : 1; });
 	}
 
 	function trim($str) {

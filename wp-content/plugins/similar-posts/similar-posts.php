@@ -274,7 +274,7 @@ function sp_terms_by_textrank($ID, $num_terms = 20) {
 		}
  		// initialise the list of PageRanks-- one for each unique word 
 		reset($graph);
-		while (list($vertex, $in_edges) =  each($graph)) {
+		foreach ($graph as $vertex => $in_edges) {
 			$oldrank[$vertex] = 0.25;
 		}
 		$n = count($graph);
@@ -285,10 +285,10 @@ function sp_terms_by_textrank($ID, $num_terms = 20) {
 				$error = 0.0;
 				// the edge-weighted PageRank calculation
 				reset($graph);
-				while (list($vertex, $in_edges) =  each($graph)) {
+				foreach ($graph as $vertex => $in_edges) {
 					$r = 0;
 					reset($in_edges);
-					while (list($edge, $weight) =  each($in_edges)) {
+					foreach ($in_edges as $edge => $weight) {
 						$r += ($weight * $oldrank[$edge]) / $out_edges[$edge];
 					}
 					$rank[$vertex] = $base + 0.95 * $r;
@@ -402,7 +402,7 @@ function sp_get_post_terms($text, $utf8, $use_stemmer, $cjk) {
 		$wordlist = mb_split("\W+", sp_mb_clean_words($text));
 		$words = '';
 		reset($wordlist);
-		while (list($n, $word) =  each($wordlist)) {
+		foreach ($wordlist as $n => $word) {
 			if ( mb_strlen($word) > 3 && !isset($overusedwords[$word])) {
 				switch ($use_stemmer) {
 				case 'true':
@@ -421,7 +421,7 @@ function sp_get_post_terms($text, $utf8, $use_stemmer, $cjk) {
 		$wordlist = str_word_count(sp_clean_words($text), 1);
 		$words = ''; 
 		reset($wordlist);
-		while (list($n, $word) =  each($wordlist)) {
+		foreach ($wordlist as $n => $word) {
 			if ( strlen($word) > 3 && !isset($overusedwords[$word])) {
 				switch ($use_stemmer) {
 				case 'true':
