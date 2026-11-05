@@ -1,20 +1,27 @@
 <?php
 /**
-** A base module for [file] and [file*]
-**/
+ * File uploading field
+ *
+ * @link https://contactform7.com/file-uploading-and-attachment/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* form_tag handler */
 
-add_action( 'wpcf7_init', 'wpcf7_add_form_tag_file' );
+add_action( 'wpcf7_init', 'wpcf7_add_form_tag_file', 10, 0 );
 
 function wpcf7_add_form_tag_file() {
 	wpcf7_add_form_tag( array( 'file', 'file*' ),
-		'wpcf7_file_form_tag_handler', true );
+		'wpcf7_file_form_tag_handler',
+		array(
+			'name-attr' => true,
+			'file-uploading' => true,
+		)
+	);
 }
 
 function wpcf7_file_form_tag_handler( $tag ) {
-	$tag = new WPCF7_FormTag( $tag );
-
 	if ( empty( $tag->name ) ) {
 		return '';
 	}
@@ -32,375 +39,257 @@ function wpcf7_file_form_tag_handler( $tag ) {
 	$atts['size'] = $tag->get_size_option( '40' );
 	$atts['class'] = $tag->get_class_option( $class );
 	$atts['id'] = $tag->get_id_option();
-	$atts['tabindex'] = $tag->get_option( 'tabindex', 'int', true );
+	$atts['capture'] = $tag->get_option( 'capture', '(user|environment)', true );
+	$atts['tabindex'] = $tag->get_option( 'tabindex', 'signed_int', true );
+
+	$atts['accept'] = wpcf7_acceptable_filetypes(
+		$tag->get_option( 'filetypes' ), 'attr'
+	);
 
 	if ( $tag->is_required() ) {
 		$atts['aria-required'] = 'true';
 	}
 
-	$atts['aria-invalid'] = $validation_error ? 'true' : 'false';
+	if ( $validation_error ) {
+		$atts['aria-invalid'] = 'true';
+		$atts['aria-describedby'] = wpcf7_get_validation_error_reference(
+			$tag->name
+		);
+	} else {
+		$atts['aria-invalid'] = 'false';
+	}
 
 	$atts['type'] = 'file';
 	$atts['name'] = $tag->name;
 
-	$atts = wpcf7_format_atts( $atts );
-
 	$html = sprintf(
-		'<span class="wpcf7-form-control-wrap %1$s"><input %2$s />%3$s</span>',
-		sanitize_html_class( $tag->name ), $atts, $validation_error );
+		'<span class="wpcf7-form-control-wrap" data-name="%1$s"><input %2$s />%3$s</span>',
+		esc_attr( $tag->name ),
+		wpcf7_format_atts( $atts ),
+		$validation_error
+	);
 
 	return $html;
 }
 
 
-/* Encode type filter */
+add_action(
+	'wpcf7_swv_create_schema',
+	'wpcf7_swv_add_file_rules',
+	10, 2
+);
 
-add_filter( 'wpcf7_form_enctype', 'wpcf7_file_form_enctype_filter' );
-
-function wpcf7_file_form_enctype_filter( $enctype ) {
-	$multipart = (bool) wpcf7_scan_form_tags( array( 'type' => array( 'file', 'file*' ) ) );
-
-	if ( $multipart ) {
-		$enctype = 'multipart/form-data';
-	}
-
-	return $enctype;
-}
-
-
-/* Validation + upload handling filter */
-
-add_filter( 'wpcf7_validate_file', 'wpcf7_file_validation_filter', 10, 2 );
-add_filter( 'wpcf7_validate_file*', 'wpcf7_file_validation_filter', 10, 2 );
-
-function wpcf7_file_validation_filter( $result, $tag ) {
-	$tag = new WPCF7_FormTag( $tag );
-
-	$name = $tag->name;
-	$id = $tag->get_id_option();
-
-	$file = isset( $_FILES[$name] ) ? $_FILES[$name] : null;
-
-	if ( $file['error'] && UPLOAD_ERR_NO_FILE != $file['error'] ) {
-		$result->invalidate( $tag, wpcf7_get_message( 'upload_failed_php_error' ) );
-		return $result;
-	}
-
-	if ( empty( $file['tmp_name'] ) && $tag->is_required() ) {
-		$result->invalidate( $tag, wpcf7_get_message( 'invalid_required' ) );
-		return $result;
-	}
-
-	if ( ! is_uploaded_file( $file['tmp_name'] ) ) {
-		return $result;
-	}
-
-	$allowed_file_types = array();
-
-	if ( $file_types_a = $tag->get_option( 'filetypes' ) ) {
-		foreach ( $file_types_a as $file_types ) {
-			$file_types = explode( '|', $file_types );
-
-			foreach ( $file_types as $file_type ) {
-				$file_type = trim( $file_type, '.' );
-				$file_type = str_replace( array( '.', '+', '*', '?' ),
-					array( '\.', '\+', '\*', '\?' ), $file_type );
-				$allowed_file_types[] = $file_type;
-			}
-		}
-	}
-
-	$allowed_file_types = array_unique( $allowed_file_types );
-	$file_type_pattern = implode( '|', $allowed_file_types );
-
-	$allowed_size = 1048576; // default size 1 MB
-
-	if ( $file_size_a = $tag->get_option( 'limit' ) ) {
-		$limit_pattern = '/^([1-9][0-9]*)([kKmM]?[bB])?$/';
-
-		foreach ( $file_size_a as $file_size ) {
-			if ( preg_match( $limit_pattern, $file_size, $matches ) ) {
-				$allowed_size = (int) $matches[1];
-
-				if ( ! empty( $matches[2] ) ) {
-					$kbmb = strtolower( $matches[2] );
-
-					if ( 'kb' == $kbmb ) {
-						$allowed_size *= 1024;
-					} elseif ( 'mb' == $kbmb ) {
-						$allowed_size *= 1024 * 1024;
-					}
-				}
-
-				break;
-			}
-		}
-	}
-
-	/* File type validation */
-
-	// Default file-type restriction
-	if ( '' == $file_type_pattern ) {
-		$file_type_pattern = 'jpg|jpeg|png|gif|pdf|doc|docx|ppt|pptx|odt|avi|ogg|m4a|mov|mp3|mp4|mpg|wav|wmv';
-	}
-
-	$file_type_pattern = trim( $file_type_pattern, '|' );
-	$file_type_pattern = '(' . $file_type_pattern . ')';
-	$file_type_pattern = '/\.' . $file_type_pattern . '$/i';
-
-	if ( ! preg_match( $file_type_pattern, $file['name'] ) ) {
-		$result->invalidate( $tag, wpcf7_get_message( 'upload_file_type_invalid' ) );
-		return $result;
-	}
-
-	/* File size validation */
-
-	if ( $file['size'] > $allowed_size ) {
-		$result->invalidate( $tag, wpcf7_get_message( 'upload_file_too_large' ) );
-		return $result;
-	}
-
-	wpcf7_init_uploads(); // Confirm upload dir
-	$uploads_dir = wpcf7_upload_tmp_dir();
-	$uploads_dir = wpcf7_maybe_add_random_dir( $uploads_dir );
-
-	$filename = $file['name'];
-	$filename = wpcf7_canonicalize( $filename, 'as-is' );
-	$filename = sanitize_file_name( $filename );
-	$filename = wpcf7_antiscript_file_name( $filename );
-	$filename = wp_unique_filename( $uploads_dir, $filename );
-
-	$new_file = trailingslashit( $uploads_dir ) . $filename;
-
-	if ( false === @move_uploaded_file( $file['tmp_name'], $new_file ) ) {
-		$result->invalidate( $tag, wpcf7_get_message( 'upload_failed' ) );
-		return $result;
-	}
-
-	// Make sure the uploaded file is only readable for the owner process
-	@chmod( $new_file, 0400 );
-
-	if ( $submission = WPCF7_Submission::get_instance() ) {
-		$submission->add_uploaded_file( $name, $new_file );
-	}
-
-	return $result;
-}
-
-
-/* Messages */
-
-add_filter( 'wpcf7_messages', 'wpcf7_file_messages' );
-
-function wpcf7_file_messages( $messages ) {
-	return array_merge( $messages, array(
-		'upload_failed' => array(
-			'description' => __( "Uploading a file fails for any reason", 'contact-form-7' ),
-			'default' => __( "There was an unknown error uploading the file.", 'contact-form-7' )
-		),
-
-		'upload_file_type_invalid' => array(
-			'description' => __( "Uploaded file is not allowed for file type", 'contact-form-7' ),
-			'default' => __( "You are not allowed to upload files of this type.", 'contact-form-7' )
-		),
-
-		'upload_file_too_large' => array(
-			'description' => __( "Uploaded file is too large", 'contact-form-7' ),
-			'default' => __( "The file is too big.", 'contact-form-7' )
-		),
-
-		'upload_failed_php_error' => array(
-			'description' => __( "Uploading a file fails for PHP error", 'contact-form-7' ),
-			'default' => __( "There was an error uploading the file.", 'contact-form-7' )
-		)
+function wpcf7_swv_add_file_rules( $schema, $contact_form ) {
+	$tags = $contact_form->scan_form_tags( array(
+		'basetype' => array( 'file' ),
 	) );
+
+	foreach ( $tags as $tag ) {
+		if ( $tag->is_required() ) {
+			$schema->add_rule(
+				wpcf7_swv_create_rule( 'requiredfile', array(
+					'field' => $tag->name,
+					'error' => wpcf7_get_message( 'invalid_required' ),
+				) )
+			);
+		}
+
+		$schema->add_rule(
+			wpcf7_swv_create_rule( 'file', array(
+				'field' => $tag->name,
+				'accept' => explode( ',', wpcf7_acceptable_filetypes(
+					$tag->get_option( 'filetypes' ), 'attr'
+				) ),
+				'error' => wpcf7_get_message( 'upload_file_type_invalid' ),
+			) )
+		);
+
+		$schema->add_rule(
+			wpcf7_swv_create_rule( 'maxfilesize', array(
+				'field' => $tag->name,
+				'threshold' => $tag->get_limit_option(),
+				'error' => wpcf7_get_message( 'upload_file_too_large' ),
+			) )
+		);
+	}
+}
+
+
+add_filter( 'wpcf7_mail_tag_replaced_file', 'wpcf7_file_mail_tag', 10, 4 );
+add_filter( 'wpcf7_mail_tag_replaced_file*', 'wpcf7_file_mail_tag', 10, 4 );
+
+function wpcf7_file_mail_tag( $replaced, $submitted, $html, $mail_tag ) {
+	$submission = WPCF7_Submission::get_instance();
+	$uploaded_files = $submission->uploaded_files();
+	$name = $mail_tag->field_name();
+
+	if ( ! empty( $uploaded_files[$name] ) ) {
+		$paths = (array) $uploaded_files[$name];
+		$paths = array_map( 'wp_basename', $paths );
+
+		$replaced = wpcf7_flat_join( $paths, array(
+			'separator' => wp_get_list_item_separator(),
+		) );
+	}
+
+	return $replaced;
 }
 
 
 /* Tag generator */
 
-add_action( 'wpcf7_admin_init', 'wpcf7_add_tag_generator_file', 50 );
+add_action( 'wpcf7_admin_init', 'wpcf7_add_tag_generator_file', 50, 0 );
 
 function wpcf7_add_tag_generator_file() {
 	$tag_generator = WPCF7_TagGenerator::get_instance();
+
 	$tag_generator->add( 'file', __( 'file', 'contact-form-7' ),
-		'wpcf7_tag_generator_file' );
+		'wpcf7_tag_generator_file',
+		array( 'version' => '2' )
+	);
 }
 
-function wpcf7_tag_generator_file( $contact_form, $args = '' ) {
-	$args = wp_parse_args( $args, array() );
-	$type = 'file';
+function wpcf7_tag_generator_file( $contact_form, $options ) {
+	$field_types = array(
+		'file' => array(
+			'display_name' => __( 'File uploading field', 'contact-form-7' ),
+			'heading' => __( 'File uploading field form-tag generator', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to file uploading field doc */
+				__( 'Generates a form-tag for a <a href="%s">file uploading field</a>.', 'contact-form-7' ),
+				'https://contactform7.com/file-uploading-and-attachment/'
+			),
+		),
+	);
 
-	$description = __( "Generate a form-tag for a file uploading field. For more details, see %s.", 'contact-form-7' );
+	$tgg = new WPCF7_TagGeneratorGenerator( $options['content'] );
 
-	$desc_link = wpcf7_link( __( 'http://contactform7.com/file-uploading-and-attachment/', 'contact-form-7' ), __( 'File Uploading and Attachment', 'contact-form-7' ) );
+	$formatter = new WPCF7_HTMLFormatter();
 
-?>
-<div class="control-box">
-<fieldset>
-<legend><?php echo sprintf( esc_html( $description ), $desc_link ); ?></legend>
+	$formatter->append_start_tag( 'header', array(
+		'class' => 'description-box',
+	) );
 
-<table class="form-table">
-<tbody>
-	<tr>
-	<th scope="row"><?php echo esc_html( __( 'Field type', 'contact-form-7' ) ); ?></th>
-	<td>
-		<fieldset>
-		<legend class="screen-reader-text"><?php echo esc_html( __( 'Field type', 'contact-form-7' ) ); ?></legend>
-		<label><input type="checkbox" name="required" /> <?php echo esc_html( __( 'Required field', 'contact-form-7' ) ); ?></label>
-		</fieldset>
-	</td>
-	</tr>
+	$formatter->append_start_tag( 'h3' );
 
-	<tr>
-	<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-name' ); ?>"><?php echo esc_html( __( 'Name', 'contact-form-7' ) ); ?></label></th>
-	<td><input type="text" name="name" class="tg-name oneline" id="<?php echo esc_attr( $args['content'] . '-name' ); ?>" /></td>
-	</tr>
+	$formatter->append_preformatted(
+		esc_html( $field_types['file']['heading'] )
+	);
 
-	<tr>
-	<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-limit' ); ?>"><?php echo esc_html( __( "File size limit (bytes)", 'contact-form-7' ) ); ?></label></th>
-	<td><input type="text" name="limit" class="filesize oneline option" id="<?php echo esc_attr( $args['content'] . '-limit' ); ?>" /></td>
-	</tr>
+	$formatter->end_tag( 'h3' );
 
-	<tr>
-	<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-filetypes' ); ?>"><?php echo esc_html( __( 'Acceptable file types', 'contact-form-7' ) ); ?></label></th>
-	<td><input type="text" name="filetypes" class="filetype oneline option" id="<?php echo esc_attr( $args['content'] . '-filetypes' ); ?>" /></td>
-	</tr>
+	$formatter->append_start_tag( 'p' );
 
-	<tr>
-	<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-id' ); ?>"><?php echo esc_html( __( 'Id attribute', 'contact-form-7' ) ); ?></label></th>
-	<td><input type="text" name="id" class="idvalue oneline option" id="<?php echo esc_attr( $args['content'] . '-id' ); ?>" /></td>
-	</tr>
+	$formatter->append_preformatted(
+		wp_kses_data( $field_types['file']['description'] )
+	);
 
-	<tr>
-	<th scope="row"><label for="<?php echo esc_attr( $args['content'] . '-class' ); ?>"><?php echo esc_html( __( 'Class attribute', 'contact-form-7' ) ); ?></label></th>
-	<td><input type="text" name="class" class="classvalue oneline option" id="<?php echo esc_attr( $args['content'] . '-class' ); ?>" /></td>
-	</tr>
+	$formatter->end_tag( 'header' );
 
-</tbody>
-</table>
-</fieldset>
-</div>
+	$formatter->append_start_tag( 'div', array(
+		'class' => 'control-box',
+	) );
 
-<div class="insert-box">
-	<input type="text" name="<?php echo $type; ?>" class="tag code" readonly="readonly" onfocus="this.select()" />
+	$formatter->call_user_func( static function () use ( $tgg, $field_types ) {
+		$tgg->print( 'field_type', array(
+			'with_required' => true,
+			'select_options' => array(
+				'file' => $field_types['file']['display_name'],
+			),
+		) );
 
-	<div class="submitbox">
-	<input type="button" class="button button-primary insert-tag" value="<?php echo esc_attr( __( 'Insert Tag', 'contact-form-7' ) ); ?>" />
-	</div>
+		$tgg->print( 'field_name' );
 
-	<br class="clear" />
+		$tgg->print( 'class_attr' );
+	} );
 
-	<p class="description mail-tag"><label for="<?php echo esc_attr( $args['content'] . '-mailtag' ); ?>"><?php echo sprintf( esc_html( __( "To attach the file uploaded through this field to mail, you need to insert the corresponding mail-tag (%s) into the File Attachments field on the Mail tab.", 'contact-form-7' ) ), '<strong><span class="mail-tag"></span></strong>' ); ?><input type="text" class="mail-tag code hidden" readonly="readonly" id="<?php echo esc_attr( $args['content'] . '-mailtag' ); ?>" /></label></p>
-</div>
-<?php
-}
+	$formatter->append_start_tag( 'fieldset' );
 
+	$formatter->append_start_tag( 'legend', array(
+		'id' => $tgg->ref( 'filetypes-option-legend' ),
+	) );
 
-/* Warning message */
+	$formatter->append_preformatted(
+		esc_html( __( 'Acceptable file types', 'contact-form-7' ) )
+	);
 
-add_action( 'wpcf7_admin_warnings', 'wpcf7_file_display_warning_message' );
+	$formatter->end_tag( 'legend' );
 
-function wpcf7_file_display_warning_message() {
-	if ( ! $contact_form = wpcf7_get_current_contact_form() ) {
-		return;
-	}
+	$formatter->append_start_tag( 'label' );
 
-	$has_tags = (bool) $contact_form->scan_form_tags(
-		array( 'type' => array( 'file', 'file*' ) ) );
+	$formatter->append_start_tag( 'span', array(
+		'id' => $tgg->ref( 'filetypes-option-description' ),
+	) );
 
-	if ( ! $has_tags ) {
-		return;
-	}
+	$formatter->append_preformatted(
+		esc_html( __( 'Pipe-separated file types list. You can use file extensions and MIME types.', 'contact-form-7' ) )
+	);
 
-	$uploads_dir = wpcf7_upload_tmp_dir();
-	wpcf7_init_uploads();
+	$formatter->end_tag( 'span' );
 
-	if ( ! is_dir( $uploads_dir ) || ! wp_is_writable( $uploads_dir ) ) {
-		$message = sprintf( __( 'This contact form contains file uploading fields, but the temporary folder for the files (%s) does not exist or is not writable. You can create the folder or change its permission manually.', 'contact-form-7' ), $uploads_dir );
+	$formatter->append_start_tag( 'br' );
 
-		echo '<div class="notice notice-warning"><p>' . esc_html( $message ) . '</p></div>';
-	}
-}
+	$formatter->append_start_tag( 'input', array(
+		'type' => 'text',
+		'pattern' => '[0-9a-z*\/\|]*',
+		'value' => 'audio/*|video/*|image/*',
+		'aria-labelledby' => $tgg->ref( 'filetypes-option-legend' ),
+		'aria-describedby' => $tgg->ref( 'filetypes-option-description' ),
+		'data-tag-part' => 'option',
+		'data-tag-option' => 'filetypes:',
+	) );
 
+	$formatter->end_tag( 'fieldset' );
 
-/* File uploading functions */
+	$formatter->append_start_tag( 'fieldset' );
 
-function wpcf7_init_uploads() {
-	$dir = wpcf7_upload_tmp_dir();
-	wp_mkdir_p( $dir );
+	$formatter->append_start_tag( 'legend', array(
+		'id' => $tgg->ref( 'limit-option-legend' ),
+	) );
 
-	$htaccess_file = trailingslashit( $dir ) . '.htaccess';
+	$formatter->append_preformatted(
+		esc_html( __( 'File size limit', 'contact-form-7' ) )
+	);
 
-	if ( file_exists( $htaccess_file ) ) {
-		return;
-	}
+	$formatter->end_tag( 'legend' );
 
-	if ( $handle = @fopen( $htaccess_file, 'w' ) ) {
-		fwrite( $handle, "Deny from all\n" );
-		fclose( $handle );
-	}
-}
+	$formatter->append_start_tag( 'label' );
 
-function wpcf7_maybe_add_random_dir( $dir ) {
-	do {
-		$rand_max = mt_getrandmax();
-		$rand = zeroise( mt_rand( 0, $rand_max ), strlen( $rand_max ) );
-		$dir_new = path_join( $dir, $rand );
-	} while ( file_exists( $dir_new ) );
+	$formatter->append_start_tag( 'span', array(
+		'id' => $tgg->ref( 'limit-option-description' ),
+	) );
 
-	if ( wp_mkdir_p( $dir_new ) ) {
-		return $dir_new;
-	}
+	$formatter->append_preformatted(
+		esc_html( __( 'In bytes. You can use kb and mb suffixes.', 'contact-form-7' ) )
+	);
 
-	return $dir;
-}
+	$formatter->end_tag( 'span' );
 
-function wpcf7_upload_tmp_dir() {
-	if ( defined( 'WPCF7_UPLOADS_TMP_DIR' ) )
-		return WPCF7_UPLOADS_TMP_DIR;
-	else
-		return wpcf7_upload_dir( 'dir' ) . '/wpcf7_uploads';
-}
+	$formatter->append_start_tag( 'br' );
 
-add_action( 'template_redirect', 'wpcf7_cleanup_upload_files', 20 );
+	$formatter->append_start_tag( 'input', array(
+		'type' => 'text',
+		'pattern' => '[1-9][0-9]*([kKmM]?[bB])?',
+		'value' => '1mb',
+		'aria-labelledby' => $tgg->ref( 'limit-option-legend' ),
+		'aria-describedby' => $tgg->ref( 'limit-option-description' ),
+		'data-tag-part' => 'option',
+		'data-tag-option' => 'limit:',
+	) );
 
-function wpcf7_cleanup_upload_files( $seconds = 60, $max = 100 ) {
-	if ( is_admin() || 'GET' != $_SERVER['REQUEST_METHOD']
-	|| is_robots() || is_feed() || is_trackback() ) {
-		return;
-	}
+	$formatter->end_tag( 'fieldset' );
 
-	$dir = trailingslashit( wpcf7_upload_tmp_dir() );
+	$formatter->end_tag( 'div' );
 
-	if ( ! is_dir( $dir ) || ! is_readable( $dir ) || ! wp_is_writable( $dir ) ) {
-		return;
-	}
+	$formatter->append_start_tag( 'footer', array(
+		'class' => 'insert-box',
+	) );
 
-	$seconds = absint( $seconds );
-	$max = absint( $max );
-	$count = 0;
+	$formatter->call_user_func( static function () use ( $tgg, $field_types ) {
+		$tgg->print( 'insert_box_content' );
 
-	if ( $handle = @opendir( $dir ) ) {
-		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( $file == "." || $file == ".." || $file == ".htaccess" ) {
-				continue;
-			}
+		$tgg->print( 'mail_tag_tip' );
+	} );
 
-			$mtime = @filemtime( $dir . $file );
-
-			if ( $mtime && time() < $mtime + $seconds ) { // less than $seconds old
-				continue;
-			}
-
-			wpcf7_rmdir_p( path_join( $dir, $file ) );
-			$count += 1;
-
-			if ( $max <= $count ) {
-				break;
-			}
-		}
-
-		closedir( $handle );
-	}
+	$formatter->print();
 }
