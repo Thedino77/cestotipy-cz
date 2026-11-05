@@ -4,7 +4,7 @@
  *
  * Used on index and archive pages
  *
- * @link https://codex.wordpress.org/Post_Formats
+ * @link https://developer.wordpress.org/advanced-administration/wordpress/post-formats/
  *
  * @package WordPress
  * @subpackage Twenty_Eleven
@@ -26,7 +26,7 @@
 			<?php endif; ?>
 		</header><!-- .entry-header -->
 
-		<?php if ( is_search() ) : // Only display Excerpts for Search ?>
+		<?php if ( is_search() ) : // Only display excerpts for search. ?>
 		<div class="entry-summary">
 			<?php the_excerpt(); ?>
 		</div><!-- .entry-summary -->
@@ -35,18 +35,25 @@
 			<div class="avatar">
 				<?php
 				/**
-				 * Filter the Twenty Eleven status avatar size.
+				 * Filters the Twenty Eleven status avatar size.
 				 *
 				 * @since Twenty Eleven 1.0
 				 *
-				 * @param int The height and width avatar dimensions in pixels. Default 65.
+				 * @param int $size The height and width avatar dimensions in pixels. Default 65.
 				 */
 				echo get_avatar( get_the_author_meta( 'ID' ), apply_filters( 'twentyeleven_status_avatar', 65 ) );
 				?>
 			</div>
 
 			<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'twentyeleven' ) ); ?>
-			<?php wp_link_pages( array( 'before' => '<div class="page-link"><span>' . __( 'Pages:', 'twentyeleven' ) . '</span>', 'after' => '</div>' ) ); ?>
+			<?php
+			wp_link_pages(
+				array(
+					'before' => '<div class="page-link"><span>' . __( 'Pages:', 'twentyeleven' ) . '</span>',
+					'after'  => '</div>',
+				)
+			);
+			?>
 		</div><!-- .entry-content -->
 		<?php endif; ?>
 
