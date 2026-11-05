@@ -550,6 +550,7 @@ that occur when you have a link to your own site in a post.</li>
 }
 
 function kjgrc_subpage_header ($kjgrc_selected_tab) {
+	$current_tab = array_fill_keys( array( 1, 2, 3, 4, 5, 6 ), '' );
 	$current_tab[$kjgrc_selected_tab] = "class=\"current\"";
 ?>
 <style>
@@ -698,7 +699,7 @@ function kjgrc_options_page ()
 {
 ?>
 <?php
-	$function = $_POST['function'];
+	$function = isset( $_POST['function'] ) ? $_POST['function'] : '';
 	if (isset($_GET['updated']) && ($_GET['updated'] == 'true') && 
 		(!empty($_POST['max_comments'])) && 
 		(!empty($_POST['chars_per_comment'])) &&         
@@ -1055,7 +1056,9 @@ function kjgrc_get_comments2 ($requested_comment_type,$caller)
 	}
 	global $wpdb;
 	$batch_number = 0;
-	$number_of_comments = 0;
+	$comments_number = 0;
+	$result = '';
+	$fetched_comments = array();
 
 	$requested_number_of_comments = kjgrc_get_option($requested_comment_type,"max_comments");
 	$chars_per_comment = kjgrc_get_option($requested_comment_type,"chars_per_comment");
