@@ -1002,7 +1002,7 @@ function wpdirectory() {
 
 		$summ = "SELECT SUM(count) FROM " . $wpdb->term_taxonomy . " WHERE taxonomy = 'category' AND parent = " . $parent->term_id;
 
-		$child_summ = mysql_result(mysql_query($summ),0); //считаем кол-во статей в подрубрике 1-го уровня
+		$child_summ = $wpdb->get_var($summ); //считаем кол-во статей в подрубрике 1-го уровня
 
 		$catid = $wpdb->get_var("SELECT term_ID FROM " . $wpdb->term_taxonomy . " WHERE taxonomy = 'category' AND parent = " . $parent->term_id); //определяем ID подрубрики 1-го уровня
 
