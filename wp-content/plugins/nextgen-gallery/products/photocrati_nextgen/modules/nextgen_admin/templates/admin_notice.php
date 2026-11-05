@@ -1,6 +1,11 @@
-<div data-notification-name="<?php echo esc_attr($notice_name)?>" class="ngg_admin_notice <?php echo esc_attr($css_class)?>">
-	<p><?php echo $html ?></p>
-	<?php if ($is_dismissable): ?>
-	<p><a class='dismiss' href="#"><?php esc_html_e(__('Dismiss', 'nggallery')) ?></a></p>
+<div data-notification-name="<?php echo esc_attr( $notice_name ); ?>" class="ngg_admin_notice <?php echo esc_attr( $css_class ); ?>">
+	<p>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $html contains safe HTML for admin notice content
+	echo $html;
+	?>
+	</p>
+	<?php if ( $show_dismiss_button ) : ?>
+	<p><a class='dismiss' href="#"><?php esc_html_e( 'Dismiss', 'nggallery' ); ?></a></p>
 	<?php endif ?>
 </div>

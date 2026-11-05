@@ -1,261 +1,70 @@
 <?php
 /**
- * Class A_Fs_Access_Page
- * @todo Finish the implementation
- * @mixin C_NextGen_Admin_Page_Controller
- * @adapts I_NextGen_Admin_Page for the "ngg_fs_access" context
- */
-class A_Fs_Access_Page extends Mixin
-{
-    function index_action()
-    {
-        $router = C_Router::get_instance();
-        $url = $this->param('uri') ? $router->get_url($this->param('uri')) : admin_url('/admin.php?' . $router->get_querystring());
-        // Request filesystem credentials from user
-        $creds = request_filesystem_credentials($url, '', FALSE, ABSPATH, array());
-        if (WP_Filesystem($creds)) {
-            global $wp_filesystem;
-        }
-    }
-    /**
-     * Determines whether the given paths are writable
-     * @return boolean
-     */
-    function are_paths_writable()
-    {
-        $retval = TRUE;
-        $path = $this->object->param('path');
-        if (!is_array($path)) {
-            $path = array($path);
-        }
-        foreach ($path as $p) {
-            if (!is_writable($p)) {
-                $retval = FALSE;
-                break;
-            }
-        }
-        return $retval;
-    }
-}
-/**
  * Provides validation for datamapper entities within an MVC controller
+ *
  * @mixin C_MVC_Controller
  * @adapts I_MVC_Controller
  */
 class A_MVC_Validation extends Mixin
 {
-    function show_errors_for($entity, $return = FALSE)
+    public function show_errors_for($entity, $return_output = false)
     {
         $retval = '';
-        if ($entity->is_invalid()) {
-            $retval = $this->object->render_partial('photocrati-nextgen_admin#entity_errors', array('entity' => $entity), $return);
+        if (!$entity->is_valid()) {
+            $retval = $this->object->render_partial('photocrati-nextgen_admin#entity_errors', ['entity' => $entity], $return_output);
         }
         return $retval;
     }
-    function show_success_for($entity, $message, $return = FALSE)
+    public function show_success_for($entity, $message, $return_output = false)
     {
         $retval = '';
         if ($entity->is_valid()) {
-            $retval = $this->object->render_partial('photocrati-nextgen_admin#entity_saved', array('entity' => $entity, 'message' => $message));
+            $retval = $this->object->render_partial('photocrati-nextgen_admin#entity_saved', ['entity' => $entity, 'message' => $message]);
         }
         return $retval;
     }
 }
-/**
- * Class A_NextGen_Admin_Default_Pages
- * @mixin C_Page_Manager
- * @adapts I_Page_Manager
- */
-class A_NextGen_Admin_Default_Pages extends Mixin
-{
-    function setup()
-    {
-        $this->object->add(NGG_FS_ACCESS_SLUG, array('adapter' => 'A_Fs_Access_Page', 'parent' => NGGFOLDER, 'add_menu' => FALSE));
-        return $this->call_parent('setup');
-    }
-}
-class C_Admin_Notification_Wrapper
-{
-    var $_name;
-    var $_data;
-    function __construct($name, $data)
-    {
-        $this->_name = $name;
-        $this->_data = $data;
-    }
-    function is_renderable()
-    {
-        return true;
-    }
-    function is_dismissable()
-    {
-        return true;
-    }
-    function render()
-    {
-        return $this->_data["message"];
-    }
-}
-class C_Admin_Notification_Manager
-{
-    var $_notifications = array();
-    var $_displayed_notice = FALSE;
-    var $_dismiss_url = NULL;
-    static $_instance = NULL;
-    static function get_instance()
-    {
-        if (!isset(self::$_instance)) {
-            $klass = get_class();
-            self::$_instance = new $klass();
-        }
-        return self::$_instance;
-    }
-    function __construct()
-    {
-        $this->_dismiss_url = site_url('/?ngg_dismiss_notice=1');
-    }
-    function has_displayed_notice()
-    {
-        return $this->_displayed_notice;
-    }
-    function add($name, $handler)
-    {
-        $this->_notifications[$name] = $handler;
-    }
-    function remove($name)
-    {
-        unset($this->_notifications[$name]);
-    }
-    function render()
-    {
-        $output = array();
-        foreach (array_keys($this->_notifications) as $notice) {
-            if ($html = $this->render_notice($notice)) {
-                $output[] = $html;
-            }
-        }
-        echo implode("\n", $output);
-    }
-    function is_dismissed($name)
-    {
-        $retval = FALSE;
-        $settings = C_NextGen_Settings::get_instance();
-        $dismissed = $settings->get('dismissed_notifications', array());
-        if (isset($dismissed[$name])) {
-            if ($id = get_current_user_id()) {
-                if (in_array($id, $dismissed[$name])) {
-                    $retval = TRUE;
-                } else {
-                    if (in_array('unknown', $dismissed[$name])) {
-                        $retval = TRUE;
-                    }
-                }
-            }
-        }
-        return $retval;
-    }
-    function dismiss($name)
-    {
-        $retval = FALSE;
-        if ($handler = $this->get_handler_instance($name)) {
-            $has_method = method_exists($handler, 'is_dismissable');
-            if ($has_method && $handler->is_dismissable() || !$has_method) {
-                $settings = C_NextGen_Settings::get_instance();
-                $dismissed = $settings->get('dismissed_notifications', array());
-                if (!isset($dismissed[$name])) {
-                    $dismissed[$name] = array();
-                }
-                $user_id = get_current_user_id();
-                $dismissed[$name][] = $user_id ? $user_id : 'unknown';
-                $settings->set('dismissed_notifications', $dismissed);
-                $settings->save();
-                $retval = TRUE;
-            }
-        }
-        return $retval;
-    }
-    function get_handler_instance($name)
-    {
-        $retval = NULL;
-        if (isset($this->_notifications[$name])) {
-            $handler = $this->_notifications[$name];
-            if (is_object($handler)) {
-                $retval = $handler;
-            } elseif (is_array($handler)) {
-                $retval = new C_Admin_Notification_Wrapper($name, $handler);
-            } elseif (class_exists($handler)) {
-                $retval = call_user_func(array($handler, 'get_instance'), $name);
-            }
-        }
-        return $retval;
-    }
-    function enqueue_scripts()
-    {
-        if ($this->has_displayed_notice()) {
-            $router = C_Router::get_instance();
-            wp_enqueue_script('ngg_admin_notices', $router->get_static_url('photocrati-nextgen_admin#admin_notices.js'), FALSE, NGG_SCRIPT_VERSION, TRUE);
-            wp_localize_script('ngg_admin_notices', 'ngg_dismiss_url', $this->_dismiss_url);
-        }
-    }
-    function serve_ajax_request()
-    {
-        $retval = array('failure' => TRUE);
-        if (isset($_REQUEST['ngg_dismiss_notice'])) {
-            header('Content-Type: application/json');
-            //			ob_start();
-            if (isset($_REQUEST['name']) && $this->dismiss($_REQUEST['name'])) {
-                $retval = array('success' => TRUE);
-            } else {
-                $retval['msg'] = __('Not a valid notice name', 'nggallery');
-            }
-            //			ob_end_clean();
-            echo json_encode($retval);
-            throw new E_Clean_Exit();
-        }
-    }
-    function render_notice($name)
-    {
-        $retval = '';
-        if (($handler = $this->get_handler_instance($name)) && !$this->is_dismissed($name)) {
-            // Does the handler want to render?
-            $has_method = method_exists($handler, 'is_renderable');
-            if ($has_method && $handler->is_renderable() || !$has_method) {
-                $view = new C_MVC_View('photocrati-nextgen_admin#admin_notice', array('css_class' => method_exists($handler, 'get_css_class') ? $handler->get_css_class() : 'updated', 'is_dismissable' => method_exists($handler, 'is_dismissable') ? $handler->is_dismissable() : FALSE, 'html' => method_exists($handler, 'render') ? $handler->render() : '', 'notice_name' => $name));
-                $retval = $view->render(TRUE);
-                $this->_displayed_notice = TRUE;
-            }
-        }
-        return $retval;
-    }
-}
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
  * Class C_Form
+ *
  * @mixin Mixin_Form_Instance_Methods
  * @mixin Mixin_Form_Field_Generators
  * @implements I_Form
  */
 class C_Form extends C_MVC_Controller
 {
-    static $_instances = array();
-    var $page = NULL;
+    /**
+     * Instances cache.
+     *
+     * @var array
+     */
+    public static $_instances = array();
+    /**
+     * Page instance.
+     *
+     * @var object|null
+     */
+    public $page = null;
     /**
      * Gets an instance of a form
+     *
      * @param string $context
      * @return C_Form
      */
-    static function &get_instance($context)
+    public static function &get_instance($context)
     {
         if (!isset(self::$_instances[$context])) {
-            $klass = get_class();
-            self::$_instances[$context] = new $klass($context);
+            self::$_instances[$context] = new C_Form($context);
         }
         return self::$_instances[$context];
     }
     /**
      * Defines the form
-     * @param string $context
+     *
+     * @param string|bool $context (optional).
      */
-    function define($context = FALSE)
+    public function define($context = false)
     {
         parent::define($context);
         $this->add_mixin('Mixin_Form_Instance_Methods');
@@ -263,149 +72,122 @@ class C_Form extends C_MVC_Controller
         $this->implement('I_Form');
     }
 }
+/**
+ * Form instance methods mixin.
+ *
+ * Provides instance methods for form handling.
+ */
 class Mixin_Form_Instance_Methods extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     /**
      * Enqueues any static resources required by the form
      */
-    function enqueue_static_resources()
+    public function enqueue_static_resources()
     {
     }
     /**
      * Gets a list of fields to render
+     *
      * @return array
      */
-    function _get_field_names()
+    public function _get_field_names()
     {
-        return array();
+        return [];
     }
-    function get_id()
+    public function get_id()
     {
         return $this->object->context;
     }
-    function get_title()
+    public function get_title()
     {
         return $this->object->context;
     }
     /**
      * Saves the form/model
+     *
      * @param array $attributes
-     * @return type
+     * @return bool
      */
-    function save_action($attributes = array())
+    public function save_action($attributes = array())
     {
         if (!$attributes) {
-            $attributes = array();
+            $attributes = [];
         }
         if ($this->object->has_method('get_model') && $this->object->get_model()) {
             return $this->object->get_model()->save($attributes);
         } else {
-            return TRUE;
+            return true;
         }
     }
     /**
      * Returns the rendered form
+     *
+     * @param bool $wrap (optional) Default = true.
+     * @return string
      */
-    function render($wrap = TRUE)
+    public function render($wrap = true)
     {
-        $fields = array();
+        $fields = [];
         foreach ($this->object->_get_field_names() as $field) {
             $method = "_render_{$field}_field";
             if ($this->object->has_method($method)) {
                 $fields[] = $this->object->{$method}($this->object->get_model());
             }
         }
-        return $this->object->render_partial('photocrati-nextgen_admin#form', array('fields' => $fields, 'wrap' => $wrap), TRUE);
+        return $this->object->render_partial('photocrati-nextgen_admin#form', ['fields' => $fields, 'wrap' => $wrap], true);
     }
-    function get_model()
+    public function get_model()
     {
-        return $this->object->page->has_method('get_model') ? $this->object->page->get_model() : NULL;
+        return $this->object->page->has_method('get_model') ? $this->object->page->get_model() : null;
+    }
+    public function get_i18n_strings()
+    {
     }
 }
 /**
- * Provides some default field generators for forms to use
+ * Provides default field generators for forms to use.
+ *
+ * Contains methods for generating form fields.
  */
 class Mixin_Form_Field_Generators extends Mixin
 {
-    function _render_select_field($display_type, $name, $label, $options = array(), $value, $text = '', $hidden = FALSE)
-    {
-        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_select', array('display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'options' => $options, 'value' => $value, 'text' => $text, 'hidden' => $hidden), True);
-    }
-    function _render_radio_field($display_type, $name, $label, $value, $text = '', $hidden = FALSE)
-    {
-        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_radio', array('display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'value' => $value, 'text' => $text, 'hidden' => $hidden), True);
-    }
-    function _render_number_field($display_type, $name, $label, $value, $text = '', $hidden = FALSE, $placeholder = '', $min = NULL, $max = NULL)
-    {
-        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_number', array('display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'value' => $value, 'text' => $text, 'hidden' => $hidden, 'placeholder' => $placeholder, 'min' => $min, 'max' => $max), True);
-    }
-    function _render_text_field($display_type, $name, $label, $value, $text = '', $hidden = FALSE, $placeholder = '')
-    {
-        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_text', array('display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'value' => $value, 'text' => $text, 'hidden' => $hidden, 'placeholder' => $placeholder), True);
-    }
-    function _render_textarea_field($display_type, $name, $label, $value, $text = '', $hidden = FALSE, $placeholder = '')
-    {
-        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_textarea', array('display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'value' => $value, 'text' => $text, 'hidden' => $hidden, 'placeholder' => $placeholder), True);
-    }
-    function _render_color_field($display_type, $name, $label, $value, $text = '', $hidden = FALSE)
-    {
-        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_color', array('display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'value' => $value, 'text' => $text, 'hidden' => $hidden), True);
-    }
-    function _render_ajax_pagination_field($display_type)
-    {
-        return $this->object->_render_radio_field($display_type, 'ajax_pagination', __('Enable AJAX pagination', 'nggallery'), isset($display_type->settings['ajax_pagination']) ? $display_type->settings['ajax_pagination'] : FALSE);
-    }
-    function _render_thumbnail_override_settings_field($display_type)
-    {
-        $hidden = !(isset($display_type->settings['override_thumbnail_settings']) ? $display_type->settings['override_thumbnail_settings'] : FALSE);
-        $override_field = $this->_render_radio_field($display_type, 'override_thumbnail_settings', __('Override thumbnail settings', 'nggallery'), isset($display_type->settings['override_thumbnail_settings']) ? $display_type->settings['override_thumbnail_settings'] : FALSE, __("This does not affect existing thumbnails; overriding the thumbnail settings will create an additional set of thumbnails. To change the size of existing thumbnails please visit 'Manage Galleries' and choose 'Create new thumbnails' for all images in the gallery.", 'nggallery'));
-        $dimensions_field = $this->object->render_partial('photocrati-nextgen_admin#field_generator/thumbnail_settings', array('display_type_name' => $display_type->name, 'name' => 'thumbnail_dimensions', 'label' => __('Thumbnail dimensions', 'nggallery'), 'thumbnail_width' => isset($display_type->settings['thumbnail_width']) ? intval($display_type->settings['thumbnail_width']) : 0, 'thumbnail_height' => isset($display_type->settings['thumbnail_height']) ? intval($display_type->settings['thumbnail_height']) : 0, 'hidden' => $hidden ? 'hidden' : '', 'text' => ''), TRUE);
-        /*
-        $qualities = array();
-        for ($i = 100; $i > 40; $i -= 5) { $qualities[$i] = "{$i}%"; }
-        $quality_field = $this->_render_select_field(
-            $display_type,
-            'thumbnail_quality',
-            __('Thumbnail quality', 'nggallery'),
-            $qualities,
-            isset($display_type->settings['thumbnail_quality']) ? $display_type->settings['thumbnail_quality'] : 100,
-            '',
-            $hidden
-        );
-        */
-        $crop_field = $this->_render_radio_field($display_type, 'thumbnail_crop', __('Thumbnail crop', 'nggallery'), isset($display_type->settings['thumbnail_crop']) ? $display_type->settings['thumbnail_crop'] : FALSE, '', $hidden);
-        /*
-        $watermark_field = $this->_render_radio_field(
-            $display_type,
-            'thumbnail_watermark',
-            __('Thumbnail watermark', 'nggallery'),
-            isset($display_type->settings['thumbnail_watermark']) ? $display_type->settings['thumbnail_watermark'] : FALSE,
-            '',
-            $hidden
-        );
-        */
-        $everything = $override_field . $dimensions_field . $crop_field;
-        return $everything;
-    }
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     /**
-     * Renders the thumbnail override settings field(s)
+     * Renders a select field.
      *
-     * @param C_Display_Type $display_type
+     * @param stdClass|C_Display_Type $display_type
+     * @param string                  $name
+     * @param string                  $label
+     * @param array                   $options
+     * @param int|string              $value
+     * @param string                  $text
+     * @param bool                    $hidden
      * @return string
      */
-    function _render_image_override_settings_field($display_type)
+    public function _render_select_field($display_type, $name, $label, $options, $value, $text = '', $hidden = false)
     {
-        $hidden = !(isset($display_type->settings['override_image_settings']) ? $display_type->settings['override_image_settings'] : FALSE);
-        $override_field = $this->_render_radio_field($display_type, 'override_image_settings', __('Override image settings', 'nggallery'), isset($display_type->settings['override_image_settings']) ? $display_type->settings['override_image_settings'] : 0, __('Overriding the image settings will create an additional set of images', 'nggallery'));
-        $qualities = array();
-        for ($i = 100; $i > 40; $i -= 5) {
-            $qualities[$i] = "{$i}%";
-        }
-        $quality_field = $this->_render_select_field($display_type, 'image_quality', __('Image quality', 'nggallery'), $qualities, $display_type->settings['image_quality'], '', $hidden);
-        $crop_field = $this->_render_radio_field($display_type, 'image_crop', __('Image crop', 'nggallery'), $display_type->settings['image_crop'], '', $hidden);
-        $watermark_field = $this->_render_radio_field($display_type, 'image_watermark', __('Image watermark', 'nggallery'), $display_type->settings['image_watermark'], '', $hidden);
-        $everything = $override_field . $quality_field . $crop_field . $watermark_field;
-        return $everything;
+        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_select', ['display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'options' => $options, 'value' => $value, 'text' => $text, 'hidden' => $hidden], true);
+    }
+    public function _render_radio_field($display_type, $name, $label, $value, $text = '', $hidden = false)
+    {
+        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_radio', ['display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'value' => $value, 'text' => $text, 'hidden' => $hidden], true);
+    }
+    public function _render_number_field($display_type, $name, $label, $value, $text = '', $hidden = false, $placeholder = '', $min = null, $max = null)
+    {
+        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_number', ['display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'value' => $value, 'text' => $text, 'hidden' => $hidden, 'placeholder' => $placeholder, 'min' => $min, 'max' => $max], true);
+    }
+    public function _render_text_field($display_type, $name, $label, $value, $text = '', $hidden = false, $placeholder = '')
+    {
+        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_text', ['display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'value' => $value, 'text' => $text, 'hidden' => $hidden, 'placeholder' => $placeholder], true);
+    }
+    public function _render_textarea_field($display_type, $name, $label, $value, $text = '', $hidden = false, $placeholder = '')
+    {
+        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_textarea', ['display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'value' => $value, 'text' => $text, 'hidden' => $hidden, 'placeholder' => $placeholder], true);
+    }
+    public function _render_color_field($display_type, $name, $label, $value, $text = '', $hidden = false)
+    {
+        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_color', ['display_type_name' => $display_type->name, 'name' => $name, 'label' => $label, 'value' => $value, 'text' => $text, 'hidden' => $hidden], true);
     }
     /**
      * Renders a pair of fields for width and width-units (px, em, etc)
@@ -413,223 +195,146 @@ class Mixin_Form_Field_Generators extends Mixin
      * @param C_Display_Type $display_type
      * @return string
      */
-    function _render_width_and_unit_field($display_type)
+    public function _render_width_and_unit_field($display_type)
     {
-        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_width_and_unit', array('display_type_name' => $display_type->name, 'name' => 'width', 'label' => __('Gallery width', 'nggallery'), 'value' => $display_type->settings['width'], 'text' => __('An empty or 0 setting will make the gallery full width', 'nggallery'), 'placeholder' => __('(optional)', 'nggallery'), 'unit_name' => 'width_unit', 'unit_value' => $display_type->settings['width_unit'], 'options' => array('px' => __('Pixels', 'nggallery'), '%' => __('Percent', 'nggallery'))), TRUE);
+        return $this->object->render_partial('photocrati-nextgen_admin#field_generator/nextgen_settings_field_width_and_unit', ['display_type_name' => $display_type->name, 'name' => 'width', 'label' => __('Gallery width', 'nggallery'), 'value' => $display_type->settings['width'], 'text' => __('An empty or 0 setting will make the gallery full width', 'nggallery'), 'placeholder' => __('(optional)', 'nggallery'), 'unit_name' => 'width_unit', 'unit_value' => $display_type->settings['width_unit'], 'options' => ['px' => __('Pixels', 'nggallery'), '%' => __('Percent', 'nggallery')]], true);
     }
-    function _get_aspect_ratio_options()
+    public function _get_aspect_ratio_options()
     {
-        return array('first_image' => __('First Image', 'nggallery'), 'image_average' => __('Average', 'nggallery'), '1.5' => '3:2 [1.5]', '1.333' => '4:3 [1.333]', '1.777' => '16:9 [1.777]', '1.6' => '16:10 [1.6]', '1.85' => '1.85:1 [1.85]', '2.39' => '2.39:1 [2.39]', '1.81' => '1.81:1 [1.81]', '1' => '1:1 (Square) [1]');
+        return ['first_image' => __('First Image', 'nggallery'), 'image_average' => __('Average', 'nggallery'), '1.5' => '3:2 [1.5]', '1.333' => '4:3 [1.333]', '1.777' => '16:9 [1.777]', '1.6' => '16:10 [1.6]', '1.85' => '1.85:1 [1.85]', '2.39' => '2.39:1 [2.39]', '1.81' => '1.81:1 [1.81]', '1' => '1:1 (Square) [1]'];
     }
 }
 /**
- * Class C_Form_Manager
- * @mixin Mixin_Form_Manager
- * @implements I_Form_Manager
+ * Mailchimp opt-in notice class.
  */
-class C_Form_Manager extends C_Component
-{
-    static $_instances = array();
-    var $_forms = array();
-    /**
-     * Returns an instance of the form manager
-     * @returns C_Form_Manager
-     */
-    static function &get_instance($context = FALSE)
-    {
-        if (!isset(self::$_instances[$context])) {
-            $klass = get_class();
-            self::$_instances[$context] = new $klass($context);
-        }
-        return self::$_instances[$context];
-    }
-    /**
-     * Defines the instance
-     * @param mixed $context
-     */
-    function define($context = FALSE)
-    {
-        parent::define($context);
-        $this->add_mixin('Mixin_Form_Manager');
-        $this->implement('I_Form_Manager');
-    }
-}
-class Mixin_Form_Manager extends Mixin
+class C_Mailchimp_OptIn_Notice
 {
     /**
-     * Adds one or more
-     * @param type $type
-     * @param type $form_names
-     * @return type
+     * Instance cache.
+     *
+     * @var C_Mailchimp_OptIn_Notice $_instance
      */
-    function add_form($type, $form_names)
+    public static $_instance = null;
+    /**
+     * Gets an instance of the notice.
+     *
+     * @return C_Mailchimp_OptIn_Notice
+     */
+    public static function get_instance()
     {
-        if (!isset($this->object->_forms[$type])) {
-            $this->object->_forms[$type] = array();
+        if (!self::$_instance) {
+            self::$_instance = new C_Mailchimp_OptIn_Notice();
         }
-        if (!is_array($form_names)) {
-            $form_names = array($form_names);
-        }
-        foreach ($form_names as $form) {
-            $this->object->_forms[$type][] = $form;
-        }
-        return $this->object->get_form_count($type);
+        return self::$_instance;
     }
     /**
-     * Alias for add_form() method
-     * @param string $type
-     * @param string|array $form_names
-     * @return int
+     * Gets the CSS class for the notice.
+     *
+     * @return string
      */
-    function add_forms($type, $form_names)
+    public function get_css_class()
     {
-        return $this->object->add_form($type, $form_names);
+        return 'notice notice-success';
     }
     /**
-     * Removes one or more forms of a particular type
-     * @param string $type
-     * @param string|array $form_names
-     * @return int	number of forms remaining for the type
+     * Checks if the notice is dismissable.
+     *
+     * @return bool
      */
-    function remove_form($type, $form_names)
+    public function is_dismissable()
     {
-        $retval = 0;
-        if (isset($this->object->_forms[$type])) {
-            foreach ($form_names as $form) {
-                if ($index = array_search($form, $this->object->_forms[$type])) {
-                    unsset($this->object->_forms[$type][$index]);
-                }
-            }
-            $retval = $this->object->get_form_count($type);
-        }
-        return $retval;
+        return true;
     }
     /**
-     * Alias for remove_form() method
-     * @param string $type
-     * @param string|array $form_names
-     * @return int
-     */
-    function remove_forms($type, $form_names)
-    {
-        return $this->object->remove_form($type, $form_names);
-    }
-    /**
-     * Gets known form types
-     * @return type
-     */
-    function get_known_types()
-    {
-        return array_keys($this->object->_forms);
-    }
-    /**
-     * Gets forms of a particular type
-     * @param string $type
+     * Dismisses the notice.
+     *
+     * @param int $code The dismiss code.
      * @return array
      */
-    function get_forms($type, $instantiate = FALSE)
+    public function dismiss($code)
     {
-        $retval = array();
-        if (isset($this->object->_forms[$type])) {
-            if (!$instantiate) {
-                $retval = $this->object->_forms[$type];
-            } else {
-                foreach ($this->object->_forms[$type] as $context) {
-                    $retval[] = $this->get_registry()->get_utility('I_Form', $context);
-                }
+        return ['handled' => true];
+    }
+    /**
+     * Checks if the notice is renderable.
+     *
+     * @return bool
+     */
+    public function is_renderable()
+    {
+        if (isset($_SERVER['HTTP_REFERER']) && strpos(sanitize_text_field(wp_unslash($_SERVER['HTTP_REFERER'])), 'attach_to_post') !== false) {
+            return false;
+        }
+        if (!C_NextGen_Admin_Page_Manager::is_requested()) {
+            return false;
+        }
+        if (defined('NEXTGEN_GALLERY_PRO_PLUGIN_BASENAME') || defined('NGG_PRO_PLUGIN_BASENAME')) {
+            return false;
+        }
+        $settings = \Imagely\NGG\Settings\Settings::get_instance();
+        try {
+            $time = time();
+            $install = new DateTime('@' . $settings->get('installDate'));
+            $now = new DateTime('@' . $time);
+            $diff = (int) $install->diff($now)->format('%a days');
+            if ($diff >= 14) {
+                return true;
             }
+        } catch (Exception $exception) {
+            // Silently fail if DateTime creation fails - we're returning FALSE right away anyway.
+            unset($exception);
         }
-        return $retval;
+        return false;
     }
     /**
-     * Gets the number of forms registered for a particular type
-     * @param string $type
-     * @return int
+     * Renders the notice.
+     *
+     * @return string
      */
-    function get_form_count($type)
+    public function render()
     {
-        $retval = 0;
-        if (isset($this->object->_forms[$type])) {
-            $retval = count($this->object->_forms[$type]);
-        }
-        return $retval;
+        $manager = \Imagely\NGG\Admin\Notifications\Manager::get_instance();
+        $view = new C_MVC_View('photocrati-nextgen_admin#mailchimp_optin', ['dismiss_url' => $manager->_dismiss_url . '&name=mailchimp_opt_in&code=1', 'i18n' => ['headline' => __('Thank you for using NextGEN Gallery!', 'nggallery'), 'message' => __('Get NextGEN Gallery updates, photography tips, business tips, tutorials, and resources straight to your mailbox.', 'nggallery'), 'submit' => __('Yes, Please!', 'nggallery'), 'confirmation' => __('Thank you for subscribing!', 'nggallery'), 'email_placeholder' => __('Email Address', 'nggallery'), 'name_placeholder' => __('First Name', 'nggallery'), 'connect_error' => __('Cannot connect to the registration server right now. Please try again later.', 'nggallery')]]);
+        return $view->render(true);
     }
-    /**
-     * Gets the index of a particular form
-     * @param string $type
-     * @param string $name
-     * @return FALSE|int
-     */
-    function get_form_index($type, $name)
-    {
-        $retval = FALSE;
-        if ($this->object->get_form_count($type) > 0) {
-            $retval = array_search($name, $this->object->_forms[$type]);
-        }
-        return $retval;
-    }
-    /**
-     * Adds one or more forms before a form already registered
-     * @param string $type
-     * @param string $before
-     * @param string|array $form_names
-     * @param int $offset
-     * @return int
-     */
-    function add_form_before($type, $before, $form_names, $offset = 0)
-    {
-        $retval = 0;
-        $index = FALSE;
-        $use_add = FALSE;
-        // Append the forms
-        if ($this->object->get_form_count($type) == 0) {
-            $use_add = TRUE;
-        } else {
-            if (($index = $this->object->get_form_index($type, $name)) == FALSE) {
-                $use_add = FALSE;
-            }
-        }
-        if ($use_add) {
-            $this->object->add_forms($type, $form_names);
-        } else {
-            $before = array_slice($this->object->get_forms($type), 0, $offset);
-            $after = array_slice($this->object->get_forms($type), $offset);
-            $this->object->_forms[$type] = array_merge($before, $form_names, $after);
-            $retval = $this->object->get_form_count($type);
-        }
-        return $retval;
-    }
-    /**
-     * Adds one or more forms after an existing form
-     * @param string $type
-     * @param string $after
-     * @param string|array $form_names
-     * @return int
-     */
-    function add_form_after($type, $after, $form_names)
-    {
-        return $this->object->add_form_before($type, $after, $form_names, 1);
-    }
-}
-if (!class_exists('C_NextGen_Admin_Installer')) {
 }
 /**
- * Class C_NextGen_Admin_Page_Controller
+ * Class C_NextGen_Admin_Installer is defined in module.nextgen_admin.php
+ */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
+/**
+ * NextGEN admin page controller.
+ *
  * @mixin Mixin_NextGen_Admin_Page_Instance_Methods
- * @implements I_NextGen_Admin_Page
  */
 class C_NextGen_Admin_Page_Controller extends C_MVC_Controller
 {
-    static $_instances = array();
-    static function &get_instance($context = FALSE)
+    /**
+     * Instances cache.
+     *
+     * @var array
+     */
+    public static $_instances = array();
+    /**
+     * Page name.
+     *
+     * @var string
+     */
+    public $name;
+    /**
+     * Gets an instance of the admin page controller.
+     *
+     * @param bool|string $context
+     * @return C_NextGen_Admin_Page_Controller
+     */
+    public static function get_instance($context = false)
     {
         if (!isset(self::$_instances[$context])) {
-            $klass = get_class();
-            self::$_instances[$context] = new $klass($context);
+            self::$_instances[$context] = new C_NextGen_Admin_Page_Controller($context);
         }
         return self::$_instances[$context];
     }
-    function define($context = FALSE)
+    public function define($context = false)
     {
         if (is_array($context)) {
             $this->name = $context[0];
@@ -641,162 +346,208 @@ class C_NextGen_Admin_Page_Controller extends C_MVC_Controller
         $this->implement('I_NextGen_Admin_Page');
     }
 }
+/**
+ * Mixin for NextGEN admin page instance methods.
+ *
+ * @property Mixin_NextGen_Admin_Page_Instance_Methods|C_MVC_Controller|A_MVC_Validation $object
+ */
 class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     /**
+     * Authorizes the request.
+     *
+     * @param string $privilege
+     * @return bool
+     *
      * Authorizes the request
      */
-    function is_authorized_request($privilege = NULL)
+    public function is_authorized_request($privilege = null)
     {
         if (!$privilege) {
             $privilege = $this->object->get_required_permission();
         }
-        $security = $this->get_registry()->get_utility('I_Security_Manager');
-        $retval = $sec_token = $security->get_request_token(str_replace(array(' ', "\n", "\t"), '_', $privilege));
-        $sec_actor = $security->get_current_actor();
-        // Ensure that the user has permission to access this page
-        if (!$sec_actor->is_allowed($privilege)) {
-            $retval = FALSE;
+        // Security::verify_nonce() is a wrapper to wp_verify_nonce().
+        //
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended
+        if ($this->object->is_post_request() && (!isset($_REQUEST['nonce']) || !\Imagely\NGG\Util\Security::verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['nonce'])), $privilege))) {
+            return false;
         }
-        // Ensure that nonce is valid
-        if ($this->object->is_post_request() && !$sec_token->check_current_request()) {
-            $retval = FALSE;
-        }
-        return $retval;
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended
+        // Ensure that the user has permission to access this page.
+        return \Imagely\NGG\Util\Security::is_allowed($privilege);
     }
     /**
      * Returns the permission required to access this page
+     *
      * @return string
      */
-    function get_required_permission()
+    public function get_required_permission()
     {
-        return $this->object->name;
+        return str_replace([' ', "\n", "\t"], '_', $this->object->name);
+    }
+    // Sets an appropriate screen for NextGEN Admin Pages.
+    public function set_screen()
+    {
+        $screen = get_current_screen();
+        if ($screen) {
+            $screen->ngg = true;
+        } elseif (is_null($screen)) {
+            $screen = WP_Screen::get($this->object->name);
+            $screen->ngg = true;
+            set_current_screen($this->object->name);
+        }
     }
     /**
      * Enqueues resources required by a NextGEN Admin page
      */
-    function enqueue_backend_resources()
+    public function enqueue_backend_resources()
     {
+        $this->set_screen();
+        if (C_NextGen_Admin_Page_Manager::is_requested()) {
+            M_NextGen_Admin::enqueue_common_admin_static_resources();
+        }
         wp_enqueue_script('jquery');
         $this->object->enqueue_jquery_ui_theme();
         wp_enqueue_script('photocrati_ajax');
         wp_enqueue_script('jquery-ui-accordion');
-        wp_enqueue_script('nextgen_display_settings_page_placeholder_stub', $this->get_static_url('photocrati-nextgen_admin#jquery.placeholder.min.js'), array('jquery'), NGG_SCRIPT_VERSION, TRUE);
-        wp_register_script('iris', $this->get_router()->get_url('/wp-admin/js/iris.min.js', FALSE, TRUE), array('jquery-ui-draggable', 'jquery-ui-slider', 'jquery-touch-punch'), NGG_SCRIPT_VERSION);
-        wp_register_script('wp-color-picker', $this->get_router()->get_url('/wp-admin/js/color-picker.js', FALSE, TRUE), array('iris'), NGG_SCRIPT_VERSION);
-        wp_localize_script('wp-color-picker', 'wpColorPickerL10n', array('clear' => __('Clear', 'nggallery'), 'defaultString' => __('Default', 'nggallery'), 'pick' => __('Select Color', 'nggallery'), 'current' => __('Current Color', 'nggallery')));
-        wp_enqueue_script('nextgen_admin_page', $this->get_static_url('photocrati-nextgen_admin#nextgen_admin_page.js'), array('wp-color-picker'), NGG_SCRIPT_VERSION);
-        wp_enqueue_style('nextgen_admin_page', $this->get_static_url('photocrati-nextgen_admin#nextgen_admin_page.css'), array('wp-color-picker'), NGG_SCRIPT_VERSION);
-        // Ensure select2
+        \Imagely\NGG\Display\DisplayManager::enqueue_fontawesome();
+        // Ensure select2.
         wp_enqueue_style('ngg_select2');
         wp_enqueue_script('ngg_select2');
     }
-    function enqueue_jquery_ui_theme()
+    public function enqueue_jquery_ui_theme()
     {
-        $settings = C_NextGen_Settings::get_instance();
-        wp_enqueue_style($settings->jquery_ui_theme, is_ssl() ? str_replace('http:', 'https:', $settings->jquery_ui_theme_url) : $settings->jquery_ui_theme_url, FALSE, $settings->jquery_ui_theme_version);
+        $settings = \Imagely\NGG\Settings\Settings::get_instance();
+        wp_enqueue_style($settings->jquery_ui_theme, is_ssl() ? str_replace('http:', 'https:', $settings->jquery_ui_theme_url) : $settings->jquery_ui_theme_url, [], $settings->jquery_ui_theme_version);
     }
     /**
      * Returns the page title
+     *
      * @return string
      */
-    function get_page_title()
+    public function get_page_title()
     {
         return $this->object->name;
     }
     /**
      * Returns the page heading
+     *
      * @return string
      */
-    function get_page_heading()
+    public function get_page_heading()
     {
         return $this->object->get_page_title();
     }
     /**
-     * Returns the type of forms to render on this page
+     * Returns a header message
+     *
      * @return string
      */
-    function get_form_type()
+    public function get_header_message()
+    {
+        $message = '';
+        if (defined('NGG_PRO_PLUGIN_VERSION') || defined('NGG_PLUS_PLUGIN_VERSION')) {
+            $message = '<p>' . __('Good work. Keep making the web beautiful.', 'nggallery') . '</p>';
+        }
+        return $message;
+    }
+    /**
+     * Returns the type of forms to render on this page
+     *
+     * @return string
+     */
+    public function get_form_type()
     {
         return is_array($this->object->context) ? $this->object->context[0] : $this->object->context;
     }
-    function get_success_message()
+    public function get_success_message()
     {
-        return __("Saved successfully", 'nggallery');
+        return __('Saved successfully', 'nggallery');
     }
     /**
      * Returns an accordion tab, encapsulating the form
-     * @param I_Form $form
+     *
+     * @param C_Form $form
+     * @return string
      */
-    function to_accordion_tab($form)
+    public function to_accordion_tab($form)
     {
-        return $this->object->render_partial('photocrati-nextgen_admin#accordion_tab', array('id' => $form->get_id(), 'title' => $form->get_title(), 'content' => $form->render(TRUE)), TRUE);
+        return $this->object->render_partial('photocrati-nextgen_admin#accordion_tab', ['id' => $form->get_id(), 'title' => $form->get_title(), 'content' => $form->render(true)], true);
     }
     /**
-     * Returns the
-     * @return type
+     * Returns the forms registered for the current get_form_type()
+     *
+     * @return array
      */
-    function get_forms()
+    public function get_forms()
     {
-        $forms = array();
-        $form_manager = C_Form_Manager::get_instance();
-        foreach ($form_manager->get_forms($this->object->get_form_type()) as $form) {
-            $forms[] = $this->get_registry()->get_utility('I_Form', $form);
-        }
-        return $forms;
+        $form_manager = \Imagely\NGG\Admin\FormManager::get_instance();
+        return array_map(function ($form) {
+            $form = $this->object->get_registry()->get_utility('I_Form', $form);
+            $form->page = $this;
+            return $form;
+        }, $form_manager->get_forms($this->object->get_form_type()));
     }
     /**
      * Gets the action to be executed
+     *
      * @return string
      */
-    function _get_action()
+    public function _get_action()
     {
-        $retval = preg_quote($this->object->param('action'), '/');
-        $retval = strtolower(preg_replace("/[^\\w]/", '_', $retval));
-        return preg_replace("/_{2,}/", "_", $retval) . '_action';
+        $action_param = $this->object->param('action');
+        $action = $action_param ? $action_param : '';
+        $retval = preg_quote($action, '/');
+        $retval = strtolower(preg_replace('/[^\\w]/', '_', $retval));
+        return preg_replace('/_{2,}/', '_', $retval) . '_action';
     }
     /**
      * Returns the template to be rendered for the index action
+     *
      * @return string
      */
-    function index_template()
+    public function index_template()
     {
         return 'photocrati-nextgen_admin#nextgen_admin_page';
     }
     /**
      * Returns a list of parameters to include when rendering the view
+     *
      * @return array
      */
-    function get_index_params()
+    public function get_index_params()
     {
-        return array();
+        return [];
     }
-    function show_save_button()
+    public function show_save_button()
     {
-        return TRUE;
+        return true;
     }
     /**
      * Renders a NextGEN Admin Page using jQuery Accordions
      */
-    function index_action()
+    public function index_action()
     {
         $this->object->enqueue_backend_resources();
-        if ($token = $this->object->is_authorized_request()) {
+        $token = $this->object->is_authorized_request();
+        if ($token) {
             // Get each form. Validate it and save any changes if this is a post
-            // request
-            $tabs = array();
-            $errors = array();
+            // request.
+            $tabs = [];
+            $errors = [];
             $action = $this->object->_get_action();
-            $success = $this->param('message');
+            $success = $this->object->param('message');
             if ($success) {
                 $success = $this->object->get_success_message();
             } else {
                 $success = $this->object->is_post_request() ? $this->object->get_success_message() : '';
             }
-            // First, process the Post request
-            if ($this->object->is_post_request() && $this->has_method($action)) {
+            // First, process the Post request.
+            if ($this->object->is_post_request() && $this->object->has_method($action)) {
                 $this->object->{$action}($this->object->param($this->context));
             }
+            $index_template = $this->object->index_template();
             foreach ($this->object->get_forms() as $form) {
                 $form->page = $this->object;
                 $form->enqueue_static_resources();
@@ -805,505 +556,222 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
                         $form->{$action}($this->object->param($form->context));
                     }
                 }
-                $tabs[] = $this->object->to_accordion_tab($form);
+                // This is a strange but necessary hack: this seemingly extraneous use of to_accordion_tab() normally
+                // just means that we're rendering the admin content twice but NextGen Pro's pricelist and coupons pages
+                // actually depend on echo'ing the $tabs variable here, unlike the 'nextgen_admin_page' template which
+                // doesn't make use of the $tabs parameter at all.
+                // TLDR: The next two lines are necessary for the pricelist and coupons pages.
+                if ($index_template !== 'photocrati-nextgen_admin#nextgen_admin_page') {
+                    $tabs[] = $this->object->to_accordion_tab($form);
+                }
+                $forms[] = $form;
                 if ($form->has_method('get_model') && $form->get_model()) {
-                    if ($form->get_model()->is_invalid()) {
-                        if ($form_errors = $this->object->show_errors_for($form->get_model(), TRUE)) {
+                    if (!$form->get_model()->is_valid()) {
+                        $form_errors = $this->object->show_errors_for($form->get_model(), true);
+                        if ($form_errors) {
                             $errors[] = $form_errors;
                         }
                         $form->get_model()->clear_errors();
                     }
                 }
             }
-            // Render the view
-            $index_params = array('page_heading' => $this->object->get_page_heading(), 'tabs' => $tabs, 'errors' => $errors, 'success' => $success, 'form_header' => $token->get_form_html(), 'show_save_button' => $this->object->show_save_button(), 'model' => $this->object->has_method('get_model') ? $this->get_model() : NULL);
+            // Render the view.
+            $index_params = ['page_heading' => $this->object->get_page_heading(), 'tabs' => $tabs, 'forms' => $forms, 'errors' => $errors, 'success' => $success, 'form_header' => false, 'header_message' => $this->object->get_header_message(), 'nonce' => \Imagely\NGG\Util\Security::create_nonce($this->object->get_required_permission()), 'show_save_button' => $this->object->show_save_button(), 'model' => $this->object->has_method('get_model') ? $this->object->get_model() : null, 'logo' => $this->object->get_router()->get_static_url('photocrati-nextgen_admin#imagely_icon.png')];
             $index_params = array_merge($index_params, $this->object->get_index_params());
-            $this->render_partial($this->object->index_template(), $index_params);
+            $this->object->render_partial($index_template, $index_params);
         } else {
-            $this->render_view('photocrati-nextgen_admin#not_authorized', array('name' => $this->object->name, 'title' => $this->object->get_page_title()));
+            // The user is not authorized to view this page.
+            $this->object->render_view('photocrati-nextgen_admin#not_authorized', ['name' => $this->object->name, 'title' => $this->object->get_page_title()]);
         }
     }
 }
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
- * Class C_NextGEN_Wizard
- */
-class C_NextGEN_Wizard
-{
-    var $_id = null;
-    var $_active = false;
-    var $_priority = 100;
-    var $_data = array();
-    var $_steps = array();
-    var $_current_step = null;
-    var $_view = null;
-    function __construct($id)
-    {
-        $this->_id = $id;
-    }
-    function get_id()
-    {
-        return $this->_id;
-    }
-    function is_active()
-    {
-        return $this->_active;
-    }
-    function set_active($active)
-    {
-        $this->_active = $active;
-    }
-    function get_priority()
-    {
-        return $this->_priority;
-    }
-    function set_priority($priority)
-    {
-        $this->_priority = $priority;
-    }
-    function is_completed()
-    {
-        if (isset($this->_data['state'])) {
-            return $this->_data['state'] == 'completed';
-        }
-        return false;
-    }
-    function set_completed()
-    {
-        $this->_data['state'] = 'completed';
-    }
-    function is_cancelled()
-    {
-        if (isset($this->_data['state'])) {
-            return $this->_data['state'] == 'cancelled';
-        }
-        return false;
-    }
-    function set_cancelled()
-    {
-        $this->_data['state'] = 'cancelled';
-    }
-    function add_step($step_id, $label = null, $properties = null)
-    {
-        $step = array('label' => $label, 'target_anchor' => 'top center', 'popup_anchor' => 'bottom center', 'target_wait' => '0');
-        if ($properties != null) {
-            $step = array_merge($step, $properties);
-        }
-        $this->_steps[$step_id] = $step;
-    }
-    function get_step_list()
-    {
-        return array_keys($this->_steps);
-    }
-    function get_step_property($step_id, $prop_name)
-    {
-        if (isset($this->_steps[$step_id][$prop_name])) {
-            return $this->_steps[$step_id][$prop_name];
-        }
-        return null;
-    }
-    function set_step_property($step_id, $prop_name, $prop_value)
-    {
-        if (!isset($this->_steps[$step_id])) {
-            $this->add_step($step_id);
-        }
-        if (isset($this->_steps[$step_id])) {
-            $this->_steps[$step_id][$prop_name] = $prop_value;
-        }
-    }
-    function get_step_label($step_id)
-    {
-        return $this->get_step_property($step_id, 'label');
-    }
-    function set_step_label($step_id, $label)
-    {
-        $this->set_step_property($step_id, 'label', $label);
-    }
-    function get_step_text($step_id)
-    {
-        return $this->get_step_property($step_id, 'text');
-    }
-    function set_step_text($step_id, $text)
-    {
-        $this->set_step_property($step_id, 'text', $text);
-    }
-    function get_step_target_anchor($step_id)
-    {
-        return $this->get_step_property($step_id, 'target_anchor');
-    }
-    function set_step_target_anchor($step_id, $anchor)
-    {
-        $this->set_step_property($step_id, 'target_anchor', $anchor);
-    }
-    function get_step_target_wait($step_id)
-    {
-        return $this->get_step_property($step_id, 'target_wait');
-    }
-    function set_step_target_wait($step_id, $wait)
-    {
-        $this->set_step_property($step_id, 'target_wait', $wait);
-    }
-    function get_step_lazy($step_id)
-    {
-        return $this->get_step_property($step_id, 'lazy');
-    }
-    function set_step_lazy($step_id, $lazy)
-    {
-        $this->set_step_property($step_id, 'lazy', $lazy);
-    }
-    function get_step_context($step_id)
-    {
-        return $this->get_step_property($step_id, 'context');
-    }
-    function set_step_context($step_id, $context)
-    {
-        $this->set_step_property($step_id, 'context', $context);
-    }
-    function get_step_popup_anchor($step_id)
-    {
-        return $this->get_step_property($step_id, 'popup_anchor');
-    }
-    function set_step_popup_anchor($step_id, $anchor)
-    {
-        $this->set_step_property($step_id, 'popup_anchor', $anchor);
-    }
-    function get_step_target($step_id)
-    {
-        return $this->get_step_property($step_id, 'target');
-    }
-    function set_step_target($step_id, $target, $target_anchor = null, $popup_anchor = null)
-    {
-        $this->set_step_property($step_id, 'target', $target);
-        if ($target_anchor != null) {
-            $this->set_step_target_anchor($step_id, $target_anchor);
-        }
-        if ($popup_anchor != null) {
-            $this->set_step_popup_anchor($step_id, $popup_anchor);
-        }
-    }
-    function get_step_view($step_id)
-    {
-        return $this->get_step_property($step_id, 'view');
-    }
-    function set_step_view($step_id, $view)
-    {
-        $this->set_step_property($step_id, 'view', $view);
-    }
-    function get_step_condition($step_id)
-    {
-        return $this->get_step_property($step_id, 'condition');
-    }
-    function set_step_condition($step_id, $condition_type, $condition_value, $condition_context = null, $condition_timeout = -1)
-    {
-        $condition = array('type' => $condition_type, 'value' => $condition_value, 'context' => $condition_context, 'timeout' => $condition_timeout);
-        $this->set_step_property($step_id, 'condition', $condition);
-    }
-    function get_current_step()
-    {
-        return $this->_current_step;
-    }
-    function set_current_step($step_id)
-    {
-        $this->_current_step = $step_id;
-    }
-    function get_view()
-    {
-        return $this->_view;
-    }
-    function set_view($view)
-    {
-        $this->_view = $view;
-    }
-    function toData()
-    {
-        $steps = array();
-        $view = $this->_view;
-        $current_step = $this->_current_step;
-        foreach ($this->_steps as $step_id => $step) {
-            if ($current_step == null) {
-                $current_step = $step_id;
-            }
-            if ($current_step == $step_id && isset($step['view'])) {
-                $view = $step['view'];
-            }
-            $step['id'] = $step_id;
-            $steps[] = $step;
-        }
-        $ret = new stdClass();
-        $ret->id = $this->_id;
-        $ret->view = $view;
-        $ret->steps = $steps;
-        $ret->current_step = $this->_current_step;
-        return $ret;
-    }
-    function _set_data($data)
-    {
-        if ($data == null) {
-            $data = array();
-        }
-        $this->_data = $data;
-    }
-}
-/**
- * Class C_NextGEN_Wizard_Manager
- * @implements I_NextGEN_Wizard_Manager
- */
-class C_NextGEN_Wizard_Manager extends C_Component
-{
-    static $_instances = array();
-    var $_active = false;
-    var $_wizards = array();
-    var $_wizards_data = array();
-    var $_starter = null;
-    var $_handled_query = false;
-    /**
-     * Returns an instance of the wizard manager
-     * @returns C_NextGEN_Wizard_Manager
-     */
-    static function get_instance($context = FALSE)
-    {
-        if (!isset(self::$_instances[$context])) {
-            $klass = get_class();
-            self::$_instances[$context] = new $klass($context);
-        }
-        return self::$_instances[$context];
-    }
-    /**
-     * Defines the instance
-     * @param mixed $context
-     */
-    function define($context = FALSE)
-    {
-        parent::define($context);
-        $this->implement('I_NextGEN_Wizard_Manager');
-        $this->_wizards_data = get_option('ngg_wizards');
-    }
-    function add_wizard($id, $active = false, $priority = 100)
-    {
-        $wizard = new C_NextGEN_Wizard($id);
-        $wizard->set_active($active);
-        $wizard->set_priority($priority);
-        if (isset($this->_wizards_data[$id])) {
-            $wizard->_set_data($this->_wizards_data[$id]);
-        }
-        $this->_wizards[$id] = $wizard;
-        return $wizard;
-    }
-    function remove_wizard($id)
-    {
-        if (isset($this->_wizards[$id])) {
-            unset($this->_wizards[$id]);
-        }
-    }
-    function get_wizard($id)
-    {
-        if (isset($this->_wizards[$id])) {
-            return $this->_wizards[$id];
-        }
-        return null;
-    }
-    function _sort_wizards($wizard1, $wizard2)
-    {
-        $diff = $wizard1->get_priority() - $wizard2->get_priority();
-        if ($diff == 0) {
-            $wizard_ids = array_keys($this->_wizards);
-            $index1 = array_search($wizard1->get_id(), $wizard_ids, true);
-            $index2 = array_search($wizard2->get_id(), $wizard_ids, true);
-            if ($index1 !== false && $index2 !== false) {
-                $diff = $index1 - $index2;
-            }
-        }
-        return $diff;
-    }
-    function get_next_wizard()
-    {
-        if (!$this->is_active()) {
-            return null;
-        }
-        $wizards = $this->_wizards;
-        if (count($wizards) > 0) {
-            if (count($wizards) > 1) {
-                uasort($wizards, array($this, '_sort_wizards'));
-            }
-            foreach ($wizards as $id => $wizard) {
-                if ($wizard->is_active()) {
-                    return $wizard;
-                }
-            }
-        }
-        return null;
-    }
-    function get_running_wizard()
-    {
-        if (!$this->is_active()) {
-            return null;
-        }
-        $wizards = $this->_wizards;
-        if (count($wizards) > 0) {
-            if (count($wizards) > 1) {
-                uasort($wizards, array($this, '_sort_wizards'));
-            }
-            foreach ($wizards as $id => $wizard) {
-                if ($wizard->is_active() && $wizard->get_current_step() != null) {
-                    return $wizard;
-                }
-            }
-        }
-        return null;
-    }
-    function get_starter()
-    {
-        return $this->_starter;
-    }
-    function set_starter($starter)
-    {
-        $this->_starter = $starter;
-    }
-    function is_active()
-    {
-        return $this->_active;
-    }
-    function set_active($active)
-    {
-        $this->_active = $active;
-    }
-    function generate_wizard_query($wizard, $action, $params = array())
-    {
-    }
-    function handle_wizard_query($parameters = NULL, $force = false)
-    {
-        if ($this->_handled_query && !$force) {
-            return;
-        }
-        if ($parameters == null) {
-            $parameters = $_REQUEST;
-        }
-        // determine if we're currently in the middle of a wizard (i.e. wizard that involves multiple pages)
-        // if so then determine the current step
-        if (isset($parameters['ngg_wizard'])) {
-            $wizard = $this->get_wizard($parameters['ngg_wizard']);
-            if ($wizard != null) {
-                $wizard->set_active(true);
-                $steps = $wizard->get_step_list();
-                $count = count($steps);
-                $current_step = isset($parameters['ngg_wizard_step']) ? $parameters['ngg_wizard_step'] : null;
-                if ($current_step != null) {
-                    $idx = array_search($current_step, $steps);
-                    if ($idx !== false) {
-                        $idx++;
-                        if ($idx < $count) {
-                            $wizard->set_current_step($steps[$idx]);
-                        }
-                    }
-                } else {
-                    if ($count > 0) {
-                        $wizard->set_current_step($steps[0]);
-                    }
-                }
-            }
-            $this->_handled_query = true;
-        }
-    }
-}
-/**
- * Class C_Page_Manager
+ * Class C_NextGen_Admin_Page_Manager
+ *
  * @mixin Mixin_Page_Manager
  * @implements I_Page_Manager
  */
-class C_Page_Manager extends C_Component
+class C_NextGen_Admin_Page_Manager extends C_Component
 {
-    static $_instance = NULL;
-    var $_pages = array();
+    /**
+     * Instance cache.
+     *
+     * @var C_NextGen_Admin_Page_Manager|null
+     */
+    public static $_instance = null;
+    /**
+     * Pages array.
+     *
+     * @var array
+     */
+    public $_pages = array();
     /**
      * Gets an instance of the Page Manager
-     * @param string $context
-     * @return C_Page_Manager
+     *
+     * @param string|false $context (optional).
+     * @return C_NextGen_Admin_Page_Manager
      */
-    static function &get_instance($context = FALSE)
+    public static function &get_instance($context = false)
     {
         if (is_null(self::$_instance)) {
-            $klass = get_class();
-            self::$_instance = new $klass($context);
+            self::$_instance = new C_NextGen_Admin_Page_Manager($context);
         }
         return self::$_instance;
     }
     /**
      * Defines the instance of the Page Manager
-     * @param type $context
+     *
+     * @param string $context
      */
-    function define($context = FALSE)
+    public function define($context = false)
     {
         parent::define($context);
         $this->add_mixin('Mixin_Page_Manager');
         $this->implement('I_Page_Manager');
     }
+    /**
+     * Determines if a NextGEN page or post type is being requested
+     *
+     * @return bool|string
+     */
+    public static function is_requested()
+    {
+        $retval = false;
+        if (self::is_requested_page()) {
+            $retval = self::is_requested_page();
+        } elseif (self::is_requested_post_type()) {
+            $retval = self::is_requested_post_type();
+        }
+        return apply_filters('is_ngg_admin_page', $retval);
+    }
+    /**
+     * Determines if a NextGEN Admin page is being requested
+     *
+     * @return bool|string
+     */
+    public static function is_requested_page()
+    {
+        $retval = false;
+        // First, check the screen for the "ngg" property. This is how legacy pages register themselves.
+        $screen = get_current_screen();
+        if (property_exists($screen, 'ngg') && $screen->ngg) {
+            $retval = $screen->id;
+        } else {
+            // Check if it's a registered page.
+            foreach (self::get_instance()->get_all() as $slug => $properties) {
+                // Are we rendering a NGG added page?
+                if (isset($properties['hook_suffix'])) {
+                    $hook_suffix = $properties['hook_suffix'];
+                    if (did_action("load-{$hook_suffix}")) {
+                        $retval = $slug;
+                        break;
+                    }
+                }
+            }
+        }
+        return $retval;
+    }
+    /**
+     * Determines if a NextGEN post type is being requested
+     *
+     * @return bool|string
+     */
+    public static function is_requested_post_type()
+    {
+        $retval = false;
+        $screen = get_current_screen();
+        foreach (self::get_instance()->get_all() as $slug => $properties) {
+            // Are we rendering a NGG post type?
+            if (isset($properties['post_type']) && $screen->post_type == $properties['post_type']) {
+                $retval = $slug;
+                break;
+            }
+        }
+        return $retval;
+    }
 }
+/**
+ * Page manager mixin.
+ *
+ * Provides page management functionality for admin pages.
+ */
 class Mixin_Page_Manager extends Mixin
 {
-    function add($slug, $properties = array())
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
+    public function add($slug, $properties = array())
     {
         if (!isset($properties['adapter'])) {
-            $properties['adapter'] = NULL;
+            $properties['adapter'] = null;
         }
         if (!isset($properties['parent'])) {
-            $properties['parent'] = NULL;
+            $properties['parent'] = null;
         }
         if (!isset($properties['add_menu'])) {
-            $properties['add_menu'] = TRUE;
+            $properties['add_menu'] = true;
         }
         if (!isset($properties['before'])) {
-            $properties['before'] = NULL;
+            $properties['before'] = null;
         }
         if (!isset($properties['url'])) {
-            $properties['url'] = NULL;
+            $properties['url'] = null;
         }
         $this->object->_pages[$slug] = $properties;
     }
-    function move_page($slug, $other_slug, $after = false)
+    public function move_page($slug, $other_slug, $after = false)
     {
         $page_list = $this->object->_pages;
         if (isset($page_list[$slug]) && isset($page_list[$other_slug])) {
             $slug_list = array_keys($page_list);
             $item_list = array_values($page_list);
+            // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
             $slug_idx = array_search($slug, $slug_list);
             $item = $page_list[$slug];
             unset($slug_list[$slug_idx]);
             unset($item_list[$slug_idx]);
             $slug_list = array_values($slug_list);
             $item_list = array_values($item_list);
+            // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
             $other_idx = array_search($other_slug, $slug_list);
-            array_splice($slug_list, $other_idx, 0, array($slug));
-            array_splice($item_list, $other_idx, 0, array($item));
+            array_splice($slug_list, $other_idx, 0, [$slug]);
+            array_splice($item_list, $other_idx, 0, [$item]);
             $this->object->_pages = array_combine($slug_list, $item_list);
         }
     }
-    function remove($slug)
+    public function remove($slug)
     {
         unset($this->object->_pages[$slug]);
     }
-    function get_all()
+    public function get_all()
     {
         return $this->object->_pages;
     }
-    function setup()
+    public function setup()
     {
         $registry = $this->get_registry();
-        $controllers = array();
+        $controllers = [];
         foreach ($this->object->_pages as $slug => $properties) {
-            $page_title = "Unnamed Page";
-            $menu_title = "Unnamed Page";
-            $permission = NULL;
-            $callback = NULL;
+            $post_type = null;
+            $page_title = 'Unnamed Page';
+            $menu_title = 'Unnamed Page';
+            $permission = null;
+            $callback = null;
             // There's two type of pages we can have. Some are powered by our controllers, and others
             // are powered by WordPress, such as a custom post type page.
-            // Is this powered by a controller? If so, we expect an adapter
+            // Is this powered by a controller? If so, we expect an adapter.
             if ($properties['adapter']) {
                 $controllers[$slug] = $registry->get_utility('I_NextGen_Admin_Page', $slug);
                 $menu_title = $controllers[$slug]->get_page_heading();
                 $page_title = $controllers[$slug]->get_page_title();
                 $permission = $controllers[$slug]->get_required_permission();
-                $callback = array(&$controllers[$slug], 'index_action');
+                $callback = [&$controllers[$slug], 'index_action'];
             } elseif ($properties['url']) {
-                $slug = $properties['url'];
+                // Is this page powered by another url, such as one that WordPress provides?
+                $url = $properties['url'];
+                if (preg_match('/post_type=([^&]+)/', $url, $matches)) {
+                    $this->object->_pages[$slug]['post_type'] = $matches[1];
+                }
+                $slug = $url;
                 if (isset($properties['menu_title'])) {
                     $menu_title = $properties['menu_title'];
                 }
@@ -1313,7 +781,7 @@ class Mixin_Page_Manager extends Mixin
             }
             // Are we to add a menu?
             if ($properties['add_menu'] && current_user_can($permission)) {
-                add_submenu_page($properties['parent'], $page_title, $menu_title, $permission, $slug, $callback);
+                $this->object->_pages[$slug]['hook_suffix'] = add_submenu_page($properties['parent'], $page_title, $menu_title, $permission, $slug, $callback);
                 if ($properties['before']) {
                     global $submenu;
                     if (empty($submenu[$properties['parent']])) {
@@ -1325,14 +793,10 @@ class Mixin_Page_Manager extends Mixin
                     $before_index = -1;
                     if ($parent != null) {
                         foreach ($parent as $index => $menu) {
-                            // under add_submenu_page, $menu_slug is index 2
-                            // $submenu[$parent_slug][] = array ( $menu_title, $capability, $menu_slug, $page_title );
                             if ($menu[2] == $slug) {
                                 $item_index = $index;
-                            } else {
-                                if ($menu[2] == $properties['before']) {
-                                    $before_index = $index;
-                                }
+                            } elseif ($menu[2] == $properties['before']) {
+                                $before_index = $index;
                             }
                         }
                     }
@@ -1341,13 +805,93 @@ class Mixin_Page_Manager extends Mixin
                         unset($parent[$item_index]);
                         $parent = array_values($parent);
                         if ($item_index < $before_index) {
-                            $before_index--;
+                            --$before_index;
                         }
-                        array_splice($parent, $before_index, 0, array($item));
+                        array_splice($parent, $before_index, 0, [$item]);
                         $submenu[$properties['parent']] = $parent;
                     }
                 }
             }
         }
+        do_action('ngg_pages_setup');
+    }
+}
+/**
+ * NextGen first run notification wizard class.
+ */
+class C_NextGen_First_Run_Notification_Wizard
+{
+    /**
+     * Instance cache.
+     *
+     * @var C_NextGen_First_Run_Notification_Wizard|null
+     */
+    protected static $_instance = null;
+    /**
+     * Checks if the wizard is renderable.
+     *
+     * @return bool
+     */
+    public function is_renderable()
+    {
+        // Don't show the wizard if user already has galleries.
+        $gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
+        $gallery_count = $gallery_mapper->count();
+        // Only show if there are no galleries.
+        return $gallery_count === 0;
+    }
+    /**
+     * Renders the wizard.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $block = <<<'EOT'
+        <style>
+            div#ngg-wizard-video {
+                width: 710px;
+                max-width: 710px;
+            }
+        </style>
+        <div class="hidden" id="ngg-wizard-video" style="border: none">
+            <iframe width="640"
+                    height="480"
+                    src="https://www.youtube.com/embed/ZAYj6D5XXNk"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media;"
+                    allowfullscreen></iframe>
+        </div>
+EOT;
+        return __('Thanks for installing Imagely! Want help creating your first gallery?', 'nggallery') . ' <a href="' . esc_url(admin_url('index.php?page=nextgen-gallery-setup-wizard')) . '" >' . __('Launch the Gallery Wizard', 'nggallery') . '</a>. ' . __('If you close this message, you can also launch the Gallery Wizard at any time from the', 'nggallery') . ' <a href="' . esc_url(admin_url('admin.php?page=imagely&tab=general')) . '">' . __('NextGEN Overview page', 'nggallery') . '</a>.' . $block;
+    }
+    public function get_css_class()
+    {
+        return 'updated';
+    }
+    public function is_dismissable()
+    {
+        return true;
+    }
+    public function dismiss($code)
+    {
+        return ['handled' => true];
+    }
+    public function enqueue_backend_resources()
+    {
+        wp_enqueue_script('nextgen_first_run_wizard', \Imagely\NGG\Util\Router::get_instance()->get_static_url('photocrati-nextgen_admin#first_run_wizard.js'), ['jquery', 'jquery-modal'], NGG_SCRIPT_VERSION, true);
+        wp_enqueue_style('jquery-modal');
+    }
+    /**
+     * Gets an instance of the wizard.
+     *
+     * @return C_NextGen_First_Run_Notification_Wizard
+     */
+    public static function get_instance()
+    {
+        if (!isset(self::$_instance)) {
+            self::$_instance = new C_NextGen_First_Run_Notification_Wizard();
+        }
+        return self::$_instance;
     }
 }
