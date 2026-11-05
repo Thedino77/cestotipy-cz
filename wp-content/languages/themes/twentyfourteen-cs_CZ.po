@@ -1,120 +1,283 @@
-# Translation of Twenty Fourteen in Czech
-# This file is distributed under the same license as the Twenty Fourteen package.
+# Translation of Themes - Twenty Fourteen in Czech
+# This file is distributed under the same license as the Themes - Twenty Fourteen package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2015-07-18 11:27:20+0000\n"
+"PO-Revision-Date: 2026-03-13 16:55:13+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: GlotPress/2.1.0-alpha\n"
-"Project-Id-Version: Twenty Fourteen\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n >= 2 && n <= 4) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: cs_CZ\n"
+"Project-Id-Version: Themes - Twenty Fourteen\n"
 
-#. Description of the plugin/theme
+#. Description of the theme
+#: style.css
+#, gp-priority: high
 msgid "In 2014, our default theme lets you create a responsive magazine website with a sleek, modern design. Feature your favorite homepage content in either a grid or a slider. Use the three widget areas to customize your website, and change your content's layout with a full-width page template and a contributor page to show off your authors. Creating a magazine website with WordPress has never been easier."
 msgstr "Twenty Fourteen (2014) je nová výchozí šablona pro WordPress, která je ideální zejména pro různé magazíny. Jednou z hlavních předností je flexibilní a moderní vzhled, který se automaticky přizpůsobí různým zařízením. S její pomocí můžete snadno zvýraznit doporučený obsah webu a zobrazit ho v podobě pravidelné mřížky (dlaždice) nebo přehledného posunování jednotlivých položek. V šabloně jsou definovány celkem 3 oblasti pro widgety (levý a pravý postranní panel, zápatí), takže si můžete některé části webu snadno přizpůsobit. Twenty Fourteen obsahuje i speciální widget (určen pro zobrazování nejnovějších stručných příspěvků) a volitelné šablony pro stránky (přehled autorů webu a zobrazení bez pravého postranního panelu). Tvorba vlastního webového magazínu ve WordPressu ještě nikdy nebyla snadnější a příjemnější."
 
-#. Template Name of the plugin/theme
+#. Theme Name of the theme
+#: style.css inc/block-patterns.php:20 inc/customizer.php:164
+#, gp-priority: high
+msgid "Twenty Fourteen"
+msgstr "Twenty Fourteen"
+
+#: inc/block-patterns.php:47
+msgid "2016"
+msgstr "2016"
+
+#: inc/block-patterns.php:47
+msgid "2012"
+msgstr "2012"
+
+#: inc/block-patterns.php:47
+msgid "2001"
+msgstr "2001"
+
+#: inc/block-patterns.php:44
+msgid "List"
+msgstr "Seznam"
+
+#: inc/block-patterns.php:69
+msgid "GET IN TOUCH"
+msgstr "SPOJTE SE S NÁMI"
+
+#: inc/block-patterns.php:69
+msgid "Don’t hesitate to reach out."
+msgstr "Neváhejte nás kontaktovat."
+
+#: inc/block-patterns.php:69
+msgid "GOT A QUESTION?"
+msgstr "MÁTE DOTAZ?"
+
+#: inc/block-patterns.php:69
+msgid "Write title…"
+msgstr "Napište název…"
+
+#: inc/block-patterns.php:66
+msgid "Contact"
+msgstr "Kontakt"
+
+#: inc/block-patterns.php:58
+msgid "Read More"
+msgstr "Číst více"
+
+#: inc/block-patterns.php:58
+msgid "Clouds"
+msgstr "Oblaka"
+
+#: inc/block-patterns.php:58
+msgid "Photo of a cloudy mountain"
+msgstr "Fotografie zamračené hory"
+
+#: inc/block-patterns.php:58
+msgid "Streetscape"
+msgstr "Pouliční scéna"
+
+#: inc/block-patterns.php:58
+msgid "Photo of a streetscape"
+msgstr "Fotografie pouliční scény"
+
+#: inc/block-patterns.php:58
+msgid "Bridge"
+msgstr "Most"
+
+#: inc/block-patterns.php:58
+msgid "Photo of a bridge"
+msgstr "Fotografie mostu"
+
+#: inc/block-patterns.php:58
+msgid "Sunset"
+msgstr "Západ slunce"
+
+#: inc/block-patterns.php:58
+msgid "Photo of a sunset"
+msgstr "Fotografie západu slunce"
+
+#: inc/block-patterns.php:58
+msgid "Here are some photos from my all-time favorite destinations."
+msgstr "Zde je několik fotografií z mých nejoblíbenějších destinací."
+
+#: inc/block-patterns.php:58
+msgid "Traveling Nostalgia"
+msgstr "Cestovatelská nostalgie"
+
+#: inc/block-patterns.php:55
+msgid "Summary"
+msgstr "Shrnutí"
+
+#: inc/block-patterns.php:36
+msgid "Hello, my name is Joan. I am passionate about writing, travel, and photography."
+msgstr "Dobrý den, jmenuji se Joan. Jsem vášnivá spisovatelka, cestovatelka a fotografka."
+
+#: inc/block-patterns.php:36
+msgid "I’ve traveled to over 60 countries, and have made many friends along the way. I created this website to keep track of the memories I’ve made in my years of traveling."
+msgstr "Procestovala jsem více než 60 zemí a na své cestě jsem získala mnoho přátel. Tuto webovou stránku jsem vytvořila, abych si zaznamenávala vzpomínky, které jsem během let cestování získala."
+
+#: inc/block-patterns.php:36
+msgid "A person standing in front of a lake"
+msgstr "Osoba stojící před jezerem"
+
+#: inc/block-patterns.php:33
+msgid "About"
+msgstr "O mně"
+
+#: inc/block-patterns.php:47
+msgid "My first year of traveling. I visited China, Thailand, Japan, and India."
+msgstr "Můj první rok cestování. Navštívila jsem Čínu, Thajsko, Japonsko a Indii."
+
+#: inc/block-patterns.php:47
+msgid "In 2012, I expanded my travels to Europe. I spent time in Poland, Germany, Italy, France, and Spain."
+msgstr "V roce 2012 jsem rozšířila své cesty do Evropy. Pobývala jsem v Polsku, Německu, Itálii, Francii a Španělsku."
+
+#: inc/block-patterns.php:47
+msgid "This year was devoted entirely to the western hemisphere. I went on a month-long road trip through the U.S.A. and Canada, and also visited Mexico, Brazil, and Colombia."
+msgstr "Letošní ročník byl celý věnován západní polokouli. Vydala jsem se na měsíční cestu po USA a Kanadě a navštívila jsem také Mexiko, Brazílii a Kolumbii."
+
+#: functions.php:121
+msgid "Medium Gray"
+msgstr "Středně šedá"
+
+#: functions.php:126
+msgid "Light Gray"
+msgstr "Světle šedá"
+
+#: functions.php:131
+msgid "White"
+msgstr "Bílá"
+
+#: functions.php:116
+msgid "Dark Gray"
+msgstr "Tmavě šedá"
+
+#: functions.php:106
+msgid "Green"
+msgstr "Zelená"
+
+#: functions.php:111
+msgid "Black"
+msgstr "Černá"
+
+#. translators: %s: Post title.
+#: comments.php:30
+msgctxt "comments title"
+msgid "One thought on &ldquo;%s&rdquo;"
+msgstr "1 komentář u &bdquo;%s&ldquo;"
+
+#. translators: 1: Number of comments, 2: Post title.
+#: comments.php:34
+msgctxt "comments title"
+msgid "%1$s thought on &ldquo;%2$s&rdquo;"
+msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
+msgstr[0] "%1$s komentář u &bdquo;%2$s&ldquo;"
+msgstr[1] "%1$s komentáře u &bdquo;%2$s&ldquo;"
+msgstr[2] "%1$s komentářů u &bdquo;%2$s&ldquo;"
+
+#. Template Name of the theme
 msgid "Full Width Page"
 msgstr "Stránka bez postranního panelu"
 
-#. Template Name of the plugin/theme
+#. Template Name of the theme
 msgid "Contributor Page"
 msgstr "Stránka s přehledem autorů"
 
-#: tag.php:22
+#. translators: %s: Tag title.
+#: tag.php:25
 msgid "Tag Archives: %s"
 msgstr "Archiv štítku: %s"
 
-#: search.php:18
+#. translators: %s: Search query.
+#: search.php:21
 msgid "Search Results for: %s"
 msgstr "Výsledky vyhledávání pro: %s"
 
-#: inc/widgets.php:282
+#: inc/widgets.php:308
 msgid "Post format to show:"
 msgstr "Formát zobrazených příspěvků:"
 
-#: inc/widgets.php:279
+#: inc/widgets.php:305
 msgid "Number of posts to show:"
 msgstr "Počet zobrazených příspěvků:"
 
-#: inc/widgets.php:276
+#: inc/widgets.php:302
 msgid "Title:"
 msgstr "Název:"
 
-#. translators: used with More archives link
-#: inc/widgets.php:227
+#. translators: Used with More archives link.
+#: inc/widgets.php:246
 msgid "%s <span class=\"meta-nav\">&rarr;</span>"
 msgstr "%s <span class=\"meta-nav\">&rarr;</span>"
 
-#: inc/widgets.php:183
+#. translators: 1: Post permalink, 2: Number of images in the gallery.
+#: inc/widgets.php:201
 msgid "This gallery contains <a href=\"%1$s\" rel=\"bookmark\">%2$s photo</a>."
 msgid_plural "This gallery contains <a href=\"%1$s\" rel=\"bookmark\">%2$s photos</a>."
 msgstr[0] "Galerie obsahuje <a href=\"%1$s\" rel=\"bookmark\">%2$s obrázek</a>."
 msgstr[1] "Galerie obsahuje <a href=\"%1$s\" rel=\"bookmark\">%2$s obrázky</a>."
 msgstr[2] "Galerie obsahuje <a href=\"%1$s\" rel=\"bookmark\">%2$s obrázků</a>."
 
-#: inc/widgets.php:148 inc/widgets.php:193
+#: inc/widgets.php:161 inc/widgets.php:211
 msgid "Continue reading <span class=\"meta-nav\">&rarr;</span>"
 msgstr "Celý příspěvek <span class=\"meta-nav\">&rarr;</span>"
 
-#: inc/widgets.php:101
+#: inc/widgets.php:110
 msgid "More asides"
 msgstr "Další poznámky"
 
-#: inc/widgets.php:100 taxonomy-post_format.php:30
+#: inc/widgets.php:109 taxonomy-post_format.php:30
 msgid "Asides"
 msgstr "Poznámky"
 
-#: inc/widgets.php:96
+#: inc/widgets.php:105
 msgid "More galleries"
 msgstr "Další galerie"
 
-#: inc/widgets.php:95 taxonomy-post_format.php:48
+#: inc/widgets.php:104 taxonomy-post_format.php:48
 msgid "Galleries"
 msgstr "Galerie"
 
-#: inc/widgets.php:92
+#: inc/widgets.php:101
 msgid "More links"
 msgstr "Další odkazy"
 
-#: inc/widgets.php:88
+#: inc/widgets.php:97
 msgid "More quotes"
 msgstr "Další citace"
 
-#: inc/widgets.php:91 taxonomy-post_format.php:45
+#: inc/widgets.php:100 taxonomy-post_format.php:45
 msgid "Links"
 msgstr "Odkazy"
 
-#: inc/widgets.php:87 taxonomy-post_format.php:42
+#: inc/widgets.php:96 taxonomy-post_format.php:42
 msgid "Quotes"
 msgstr "Citace"
 
-#: inc/widgets.php:84
+#: inc/widgets.php:93
 msgid "More audio"
 msgstr "Další audio příspěvky"
 
-#: inc/widgets.php:83 taxonomy-post_format.php:39
+#: inc/widgets.php:92 taxonomy-post_format.php:39
 msgid "Audio"
 msgstr "Audio"
 
-#: inc/widgets.php:80
+#: inc/widgets.php:89
 msgid "More videos"
 msgstr "Další video příspěvky"
 
-#: inc/widgets.php:79 taxonomy-post_format.php:36
+#: inc/widgets.php:88 taxonomy-post_format.php:36
 msgid "Videos"
 msgstr "Video příspěvky"
 
-#: inc/widgets.php:76
+#: inc/widgets.php:85
 msgid "More images"
 msgstr "Další obrázky"
 
-#: inc/widgets.php:75 taxonomy-post_format.php:33
+#: inc/widgets.php:84 taxonomy-post_format.php:33
 msgid "Images"
 msgstr "Obrázky"
 
-#: inc/widgets.php:36
+#: inc/widgets.php:37
 msgid "Use this widget to list your recent Aside, Quote, Video, Audio, Image, Gallery, and Link posts."
 msgstr "Speciální widget pro zobrazení nejnovějších stručných příspěvků (Poznámky, Citace, Video, Audio, Obrázky, Galerie a Odkazy)."
 
@@ -122,281 +285,287 @@ msgstr "Speciální widget pro zobrazení nejnovějších stručných příspěv
 msgid "Twenty Fourteen Ephemera"
 msgstr "Twenty Fourteen - Stručně"
 
-#: inc/template-tags.php:109
+#: inc/template-tags.php:121
 msgid "Sticky"
 msgstr "Zvýrazněný"
 
-#: inc/template-tags.php:92
+#: inc/template-tags.php:104
 msgid "<span class=\"meta-nav\">Next Post</span>%title"
 msgstr "<span class=\"meta-nav\">Další příspěvek</span>%title"
 
-#: inc/template-tags.php:91
+#: inc/template-tags.php:103
 msgid "<span class=\"meta-nav\">Previous Post</span>%title"
 msgstr "<span class=\"meta-nav\">Předchozí příspěvek</span>%title"
 
-#: inc/template-tags.php:89
+#: inc/template-tags.php:101
 msgid "<span class=\"meta-nav\">Published In</span>%title"
 msgstr "<span class=\"meta-nav\">Přiřazeno</span>%title"
 
-#: inc/template-tags.php:85
+#. translators: Hidden accessibility text.
+#: inc/template-tags.php:95
 msgid "Post navigation"
 msgstr "Navigace pro příspěvky"
 
-#: inc/template-tags.php:58
+#. translators: Hidden accessibility text.
+#: inc/template-tags.php:63
 msgid "Posts navigation"
 msgstr "Navigace pro příspěvky"
 
-#: inc/template-tags.php:51
+#: inc/template-tags.php:52
 msgid "Next &rarr;"
 msgstr "Další &rarr;"
 
-#: inc/template-tags.php:50
+#: inc/template-tags.php:51
 msgid "&larr; Previous"
 msgstr "&larr; Předchozí"
 
-#: inc/featured-content.php:431
+#: inc/featured-content.php:424
 msgid "Don&rsquo;t display tag on front end."
 msgstr "Nezobrazovat štítek na webu."
 
-#: inc/featured-content.php:426
+#: inc/featured-content.php:416
 msgid "Tag Name"
 msgstr "Název štítku"
 
-#: inc/customizer.php:147
+#. translators: %s: Twenty Fourteen documentation URL.
+#: inc/customizer.php:172
 msgid "For an in-depth tutorial, and more tips and tricks, visit the <a href=\"%s\">Twenty Fourteen documentation</a>."
 msgstr "Podrobnější návod a další zajímavé tipy pro práci se šablonou naleznete v <a href=\"%s\">manuálu pro Twenty Fourteen</a>."
 
-#: inc/customizer.php:146
+#. translators: %s: Featured images documentation URL.
+#: inc/customizer.php:170
 msgid "Enhance your site design by using <a href=\"%s\">Featured Images</a> for posts you&rsquo;d like to stand out (also known as post thumbnails). This allows you to associate an image with your post without inserting it. Twenty Fourteen uses featured images for posts and pages&mdash;above the title&mdash;and in the Featured Content area on the home page."
 msgstr "Vzhled webu můžete ovlivnit také pomocí vhodných <a href=\"%s\">náhledových obrázků</a>, a to zejména u příspěvků, které chcete nějakým způsobem zdůraznit. Snadno tak přiřadíte zvolený obrázek ke konkrétnímu příspěvku, aniž byste ho museli vkládat přímo do textu. Šablona Twenty Fourteen podporuje náhledové obrázky u příspěvků a stránek (jsou zobrazovány nad jejich názvem) a samozřejmě i v oblasti pro doporučené příspěvky na úvodní stránce."
 
-#: inc/customizer.php:145
+#. translators: 1: Featured tag editor URL, 2: Post editor URL, 3: Customizer
+#. URL, 4: Post editor URL.
+#: inc/customizer.php:168
 msgid "The home page features your choice of up to 6 posts prominently displayed in a grid or slider, controlled by a <a href=\"%1$s\">tag</a>; you can change the tag and layout in <a href=\"%2$s\">Appearance &rarr; Customize</a>. If no posts match the tag, <a href=\"%3$s\">sticky posts</a> will be displayed instead."
 msgstr "Na úvodní stránce můžete nápadně zvýraznit až 6 příspěvků, které chcete návštěvníkům z nějakého důvodu doporučit, a zobrazit je buď v podobě pravidelné mřížky (dlaždice) nebo umožnit jejich přehledné posunování. Pro výběr doporučených příspěvků slouží speciální <a href=\"%1$s\">štítek</a>, který lze snadno měnit (stejně jako způsob zobrazení) v menu <a href=\"%2$s\">Vzhled &rarr; Přizpůsobit</a>. Pokud tímto způsobem nic neoznačíte, automaticky se budou zobrazovat <a href=\"%3$s\">zvýrazněné příspěvky</a>."
 
-#. #-#-#-#-#  twentyfourteen.pot (Twenty Fourteen 1.8)  #-#-#-#-#
-#. Theme Name of the plugin/theme
-#: inc/customizer.php:142
-msgid "Twenty Fourteen"
-msgstr "Twenty Fourteen"
-
-#: inc/customizer.php:74
+#: inc/customizer.php:90
 msgid "Slider"
 msgstr "Posunovací položky"
 
-#: inc/customizer.php:73
+#: inc/customizer.php:89
 msgid "Grid"
 msgstr "Dlaždice (mřížka)"
 
-#: inc/customizer.php:69
+#: inc/customizer.php:85
 msgid "Layout"
 msgstr "Grafické rozvržení"
 
-#: inc/customizer.php:55 inc/customizer.php:145 inc/featured-content.php:405
-#: inc/featured-content.php:414 inc/featured-content.php:474
+#. translators: 1: Featured tag editor URL, 2: Post editor URL, 3: Customizer
+#. URL, 4: Post editor URL.
+#: inc/customizer.php:65 inc/customizer.php:168 inc/featured-content.php:386
+#: inc/featured-content.php:398 inc/featured-content.php:464
 msgctxt "featured content default tag slug"
 msgid "featured"
 msgstr "doporuceno"
 
-#: inc/customizer.php:54 inc/featured-content.php:404
+#. translators: 1: Featured tag editor URL, 2: Post editor URL.
+#: inc/customizer.php:64 inc/featured-content.php:385
 msgid "Use a <a href=\"%1$s\">tag</a> to feature your posts. If no posts match the tag, <a href=\"%2$s\">sticky posts</a> will be displayed instead."
 msgstr "Pro výběr doporučených příspěvků můžete použít speciální <a href=\"%1$s\">štítek</a>. Pokud tímto způsobem nic neoznačíte, automaticky se budou zobrazovat <a href=\"%2$s\">zvýrazněné příspěvky</a>."
 
-#: inc/customizer.php:53 inc/featured-content.php:403
+#: inc/customizer.php:61 inc/featured-content.php:382
 msgid "Featured Content"
 msgstr "Doporučený obsah"
 
-#: inc/customizer.php:44 inc/customizer.php:45
+#: inc/customizer.php:50 inc/customizer.php:51
 msgid "May only be visible on wide screens."
 msgstr "Nastavení bude použito pouze na dostatečně širokých zařízeních."
 
-#: inc/customizer.php:47 inc/customizer.php:48
+#: inc/customizer.php:53 inc/customizer.php:54
 msgid "Background may only be visible on wide screens."
 msgstr "Pozadí bude zobrazeno pouze na dostatečně širokých zařízeních."
 
-#: inc/customizer.php:40
+#: inc/customizer.php:46
 msgid "Display Site Title &amp; Tagline"
 msgstr "Zobrazovat název a popis webu"
 
-#: inc/customizer.php:37
+#: inc/customizer.php:43
 msgid "Site Title Color"
 msgstr "Barva pro název webu"
 
-#: inc/back-compat.php:37 inc/back-compat.php:47 inc/back-compat.php:60
+#. translators: %s: WordPress version.
+#: inc/back-compat.php:43 inc/back-compat.php:60 inc/back-compat.php:83
 msgid "Twenty Fourteen requires at least WordPress version 3.6. You are running version %s. Please upgrade and try again."
 msgstr "Šablona Twenty Fourteen vyžaduje alespoň WordPress 3.6, zatímco aktuálně používáte starší verzi %s. Nejdříve prosím proveďte aktualizaci a potom to můžete zkusit znovu."
 
-#: image.php:66
+#: image.php:69
 msgid "Next Image"
 msgstr "Další obrázek"
 
-#: image.php:65
+#: image.php:68
 msgid "Previous Image"
 msgstr "Předchozí obrázek"
 
-#: header.php:53
+#. translators: Hidden accessibility text.
+#: header.php:27
 msgid "Skip to content"
 msgstr "Přejít k obsahu webu"
 
-#: header.php:52
+#: header.php:59
 msgid "Primary Menu"
 msgstr "Základní navigační menu"
 
-#: header.php:48
+#. translators: Hidden accessibility text.
+#: header.php:53
 msgid "Search"
 msgstr "Hledat"
 
-#: functions.php:498
+#. translators: %s: Page number.
+#: functions.php:705
 msgid "Page %s"
 msgstr "Stránky %s"
 
-#: functions.php:379
+#. translators: %d: Post count.
+#: functions.php:582
 msgid "%d Article"
 msgid_plural "%d Articles"
 msgstr[0] "%d příspěvek"
 msgstr[1] "%d příspěvky"
 msgstr[2] "%d příspěvků"
 
-#: functions.php:262
+#: functions.php:390
 msgid "Next"
 msgstr "Pokračovat"
 
-#: functions.php:261
+#: functions.php:389
 msgid "Previous"
 msgstr "Předchozí"
 
-#. Translators: If there are characters in your language that are not supported
+#. translators: If there are characters in your language that are not supported
 #. by Lato, translate this to 'off'. Do not translate into your own language.
-#: functions.php:216
+#: functions.php:332
 msgctxt "Lato font: on or off"
 msgid "on"
 msgstr "off"
 
-#: functions.php:194
+#: functions.php:307
 msgid "Appears in the footer section of the site."
 msgstr "Hlavní oblast pro umístění widgetů, které se budou zobrazovat v zápatí webu."
 
-#: functions.php:192
+#: functions.php:305
 msgid "Footer Widget Area"
 msgstr "Zápatí"
 
-#: functions.php:185
+#: functions.php:296
 msgid "Additional sidebar that appears on the right."
 msgstr "Vedlejší postranní panel se zobrazuje v pravé části webu."
 
-#: functions.php:183
+#: functions.php:294
 msgid "Content Sidebar"
 msgstr "Pravý postranní panel"
 
-#: functions.php:176
+#: functions.php:285
 msgid "Main sidebar that appears on the left."
 msgstr "Hlavní postranní panel se zobrazuje v levé části webu."
 
-#: functions.php:174
+#: functions.php:283
 msgid "Primary Sidebar"
 msgstr "Levý postranní panel"
 
-#: functions.php:84
+#: functions.php:150
 msgid "Secondary menu in left sidebar"
 msgstr "Vedlejší menu v levém postranním panelu"
 
-#: functions.php:83
+#: functions.php:149
 msgid "Top primary menu"
 msgstr "Hlavní navigační menu"
 
-#: footer.php:21
+#. translators: %s: WordPress
+#: footer.php:37
 msgid "Proudly powered by %s"
 msgstr "Používáme %s (v češtině)."
 
-#: content-none.php:27
+#: content-none.php:33
 msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
 msgstr "Patrně jste chtěli na webu zobrazit něco, co se zde bohužel nenachází. Můžete ale ještě zkusit vyhledávání pomocí zadaného klíčového slova."
 
-#: content-none.php:22
+#: content-none.php:28
 msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
 msgstr "Omlouváme se, ale hledaný výraz nebyl na webu nalezen. Zkuste to prosím znovu s nějakým jiným klíčovým slovem."
 
-#: content-none.php:18
-msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
-msgstr "Chystáte se publikovat svůj první příspěvek? <a href=\"%1$s\">Můžete začít rovnou zde</a>."
+#. translators: %s: Post editor URL.
+#: content-none.php:22
+msgid "Ready to publish your first post? <a href=\"%s\">Get started here</a>."
+msgstr "Jste připraveni publikovat svůj první příspěvek? <a href=\"%s\">Začněte zde</a>."
 
-#: content-none.php:12
+#: content-none.php:13
 msgid "Nothing Found"
 msgstr "Nenalezeno"
 
-#: content-aside.php:53 content-audio.php:53 content-gallery.php:53
-#: content-image.php:53 content-link.php:53 content-page.php:22
-#: content-quote.php:53 content-video.php:53 content.php:61 image.php:54
+#: content-aside.php:57 content-audio.php:57 content-gallery.php:57
+#: content-image.php:57 content-link.php:57 content-page.php:24
+#: content-quote.php:57 content-video.php:57 content.php:66 image.php:56
 msgid "Pages:"
 msgstr "Stránky:"
 
-#. translators: %s: Name of current post
-#: content-aside.php:48 content-audio.php:48 content-gallery.php:48
-#: content-image.php:48 content-link.php:48 content-quote.php:48
-#: content-video.php:48 content.php:56 inc/template-tags.php:222
+#. translators: %s: Post title. Only visible to screen readers.
+#: content-aside.php:50 content-audio.php:50 content-gallery.php:50
+#: content-image.php:50 content-link.php:50 content-quote.php:50
+#: content-video.php:50 content.php:59 inc/template-tags.php:240
 msgid "Continue reading %s <span class=\"meta-nav\">&rarr;</span>"
 msgstr "Pokračování textu %s <span class=\"meta-nav\">&rarr;</span>"
 
-#: content-aside.php:40 content-audio.php:40 content-gallery.php:40
-#: content-image.php:40 content-link.php:40 content-page.php:28
-#: content-quote.php:40 content-video.php:40 content.php:42 image.php:34
-#: page-templates/contributors.php:35
+#: content-aside.php:41 content-audio.php:41 content-gallery.php:41
+#: content-image.php:41 content-link.php:41 content-page.php:31
+#: content-quote.php:41 content-video.php:41 content.php:44 image.php:35
+#: page-templates/contributors.php:36
 msgid "Edit"
 msgstr "Upravit"
 
-#: content-aside.php:37 content-audio.php:37 content-gallery.php:37
-#: content-image.php:37 content-link.php:37 content-quote.php:37
-#: content-video.php:37 content.php:38 inc/widgets.php:215
+#: content-aside.php:38 content-audio.php:38 content-gallery.php:38
+#: content-image.php:38 content-link.php:38 content-quote.php:38
+#: content-video.php:38 content.php:40 inc/widgets.php:234
 msgid "% Comments"
 msgstr "Komentáře: %"
 
-#: content-aside.php:37 content-audio.php:37 content-gallery.php:37
-#: content-image.php:37 content-link.php:37 content-quote.php:37
-#: content-video.php:37 content.php:38 inc/widgets.php:215
+#: content-aside.php:38 content-audio.php:38 content-gallery.php:38
+#: content-image.php:38 content-link.php:38 content-quote.php:38
+#: content-video.php:38 content.php:40 inc/widgets.php:234
 msgid "1 Comment"
 msgstr "1 komentář"
 
-#: content-aside.php:37 content-audio.php:37 content-gallery.php:37
-#: content-image.php:37 content-link.php:37 content-quote.php:37
-#: content-video.php:37 content.php:38 inc/widgets.php:215
+#: content-aside.php:38 content-audio.php:38 content-gallery.php:38
+#: content-image.php:38 content-link.php:38 content-quote.php:38
+#: content-video.php:38 content.php:40 inc/widgets.php:234
 msgid "Leave a comment"
 msgstr "Napsat komentář"
 
-#: content-aside.php:17 content-audio.php:17 content-featured-post.php:28
-#: content-gallery.php:17 content-image.php:17 content-link.php:17
-#: content-quote.php:17 content-video.php:17 content.php:19
+#: content-aside.php:18 content-audio.php:18 content-featured-post.php:29
+#: content-gallery.php:18 content-image.php:18 content-link.php:18
+#: content-quote.php:18 content-video.php:18 content.php:20
 msgctxt "Used between list items, there is a space after the comma."
 msgid ", "
 msgstr ", "
 
-#: comments.php:59
+#: comments.php:87
 msgid "Comments are closed."
 msgstr "Komentáře nejsou povoleny."
 
-#: comments.php:36 comments.php:54
+#: comments.php:57 comments.php:82
 msgid "Newer Comments &rarr;"
 msgstr "Novější komentáře &rarr;"
 
-#: comments.php:35 comments.php:53
+#: comments.php:56 comments.php:81
 msgid "&larr; Older Comments"
 msgstr "&larr; Starší komentáře"
 
-#: comments.php:34 comments.php:52
+#. translators: Hidden accessibility text.
+#: comments.php:53 comments.php:78
 msgid "Comment navigation"
 msgstr "Navigace pro komentáře"
 
-#: comments.php:27
-msgid "One thought on &ldquo;%2$s&rdquo;"
-msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
-msgstr[0] "1 komentář u &bdquo;%2$s&ldquo;"
-msgstr[1] "%1$s komentáře u &bdquo;%2$s&ldquo;"
-msgstr[2] "%1$s komentářů u &bdquo;%2$s&ldquo;"
-
-#: category.php:20
+#. translators: %s: Category title.
+#: category.php:23
 msgid "Category Archives: %s"
 msgstr "Archiv rubriky: %s"
 
-#: author.php:31
+#. translators: %s: Author display name.
+#: author.php:32
 msgid "All posts by %s"
 msgstr "Archiv autora: %s"
 
@@ -404,25 +573,30 @@ msgstr "Archiv autora: %s"
 msgid "Archives"
 msgstr "Archiv"
 
-#: archive.php:37
+#. translators: %s: Date.
+#: archive.php:38
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr "Y"
 
-#: archive.php:37
+#. translators: %s: Date.
+#: archive.php:38
 msgid "Yearly Archives: %s"
 msgstr "Archiv pro rok: %s"
 
-#: archive.php:34
+#. translators: %s: Date.
+#: archive.php:35
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr "F Y"
 
-#: archive.php:34
+#. translators: %s: Date.
+#: archive.php:35
 msgid "Monthly Archives: %s"
 msgstr "Archiv pro měsíc: %s"
 
-#: archive.php:31
+#. translators: %s: Date.
+#: archive.php:32
 msgid "Daily Archives: %s"
 msgstr "Archiv pro den: %s"
 
@@ -434,16 +608,20 @@ msgstr "Patrně jste chtěli zobrazit stránku, která se na webu bohužel nenac
 msgid "Not Found"
 msgstr "Nenalezeno"
 
-#. #-#-#-#-#  twentyfourteen.pot (Twenty Fourteen 1.8)  #-#-#-#-#
-#. Author URI of the plugin/theme
-#: footer.php:21
+#. Author URI of the theme
+#: style.css footer.php:34
+#, gp-priority: low
 msgid "https://wordpress.org/"
 msgstr "https://cs.wordpress.org/"
 
-#. Author of the plugin/theme
+#. Author of the theme
+#: style.css
+#, gp-priority: low
 msgid "the WordPress team"
 msgstr "Vývojáři WordPressu (a překladatelé)"
 
-#. Theme URI of the plugin/theme
+#. Theme URI of the theme
+#: style.css
+#, gp-priority: low
 msgid "https://wordpress.org/themes/twentyfourteen/"
-msgstr "https://wordpress.org/themes/twentyfourteen/"
+msgstr "https://cs.wordpress.org/themes/twentyfourteen/"

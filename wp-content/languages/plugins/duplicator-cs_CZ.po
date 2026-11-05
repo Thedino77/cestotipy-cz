@@ -1,0 +1,1099 @@
+# Translation of Plugins - Duplicator &#8211; Backups &amp; Migration Plugin &#8211; Cloud Backups, Scheduled Backups, &amp; More - Stable (latest release) in Czech
+# This file is distributed under the same license as the Plugins - Duplicator &#8211; Backups &amp; Migration Plugin &#8211; Cloud Backups, Scheduled Backups, &amp; More - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2026-09-20 10:17:42+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n >= 2 && n <= 4) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.1.0\n"
+"Language: cs_CZ\n"
+"Project-Id-Version: Plugins - Duplicator &#8211; Backups &amp; Migration Plugin &#8211; Cloud Backups, Scheduled Backups, &amp; More - Stable (latest release)\n"
+
+#: src/Core/Options/Rules/DbDumpEngineRule.php:54
+msgid "PHP Code"
+msgstr "PHP kód"
+
+#: template/admin_pages/tools/general_validator.php:55
+msgid "Files:"
+msgstr "Soubory:"
+
+#: template/admin_pages/settings/backup/installer_settings.php:115
+#: template/parts/packages/filters/section_security.php:35
+msgid "Mode"
+msgstr "Mód"
+
+#: template/admin_pages/packages/no_elements_row.php:24
+msgid "New to Duplicator?"
+msgstr "Začínáte s Duplicator?"
+
+#: addons/litebase/LiteBase.php:144
+#: addons/litebase/src/Controllers/LiteToolsController.php:48
+msgid "Support"
+msgstr "Podpora"
+
+#: template/admin_pages/settings/backup/database_settings.php:170
+msgid "/usr/bin/mypath/mysqldump"
+msgstr "/usr/bin/mypath/mysqldump.exe"
+
+#: template/admin_pages/packages/scan/scripts.php:33
+msgid "Error applying filters.  Please go back to Step 1 to add filter manually!"
+msgstr "Chyba aplikování filtrů. Vraťte se ke kroku 1 a přidejte filtr ručně!"
+
+#: template/admin_pages/packages/scan/scripts.php:95
+msgid "Initializing Please Wait..."
+msgstr "Inicializuji, čekejte..."
+
+#: template/admin_pages/packages/scan/scripts.php:28
+msgid "Manual copy of selected text required on this browser."
+msgstr "Tento prohlížeč vyžaduje ruční kopírování vybraného textu."
+
+#: template/admin_pages/packages/scan/scripts.php:118
+msgid "No files have been selected!"
+msgstr "Nebyly vybrány žádné soubory!"
+
+#: template/admin_pages/packages/scan/scripts.php:21
+msgid "Copy Quick Filter Paths"
+msgstr "Kopírovat cesty rychlého filtru"
+
+#: template/admin_pages/packages/scan/scripts.php:154
+msgid "Copied to Clipboard!"
+msgstr "Zkopírováno do schránky!"
+
+#: template/admin_pages/packages/scan/items/database/mysqldump.php:72
+#: template/admin_pages/packages/scan/items/database/tables.php:92
+msgid "RECOMMENDATIONS:"
+msgstr "DOPORUČENÍ:"
+
+#: template/admin_pages/packages/scan/items/database/tables.php:54
+msgid "TABLE DETAILS:"
+msgstr "DETAILY TABULKY:"
+
+#: template/admin_pages/packages/scan/items/database/tables.php:33
+msgid "TOTAL SIZE"
+msgstr "CELKOVÁ VELIKOST"
+
+#: template/admin_pages/packages/scan/items/archive/files.php:141
+msgid "Copy Paths to Clipboard"
+msgstr "Kopírovat cesty do schránky"
+
+#: template/admin_pages/packages/scan/items/archive/addons.php:63
+#: template/admin_pages/packages/scan/items/archive/files.php:135
+#: template/admin_pages/packages/scan/scripts.php:100
+msgid "Add Filters &amp; Rescan"
+msgstr "Přidat filtry &amp; přeskenovat"
+
+#: src/Package/Archive/PackageArchive.php:1019
+msgid "No large files found during this scan."
+msgstr "V průběhu skenu nebyly nalezeny žádné velké soubory."
+
+#: src/Package/Archive/PackageArchive.php:1174
+msgid "Core WordPress directories should not be filtered. Use caution when excluding files."
+msgstr "Adresáře jádra WordPress by neměly být filtrovány. Dejte pozor při vynechávání souborů."
+
+#: template/admin_pages/packages/scan/items/archive/files.php:107
+#: template/admin_pages/packages/scan/items/archive/files.php:117
+msgid "Show All"
+msgstr "Ukázat vše"
+
+#: template/admin_pages/packages/scan/items/archive/files.php:102
+msgid "Hide All"
+msgstr "Skrýt vše"
+
+#: template/admin_pages/packages/scan/items/archive/addons.php:33
+#: template/admin_pages/packages/scan/items/archive/files.php:73
+msgid "Quick Filters"
+msgstr "Rychlé filtry"
+
+#: template/admin_pages/packages/scan/items/archive/files.php:64
+msgid "What can I try for Timeout Issues?"
+msgstr "Co můžu zkusit při problémech s timeouty?"
+
+#: template/admin_pages/packages/scan/items/archive/files.php:40
+msgid "more details..."
+msgstr "více detailů..."
+
+#: template/admin_pages/packages/scan/items/archive/files.php:25
+msgid "Size Checks"
+msgstr "Kontroly velikosti"
+
+#: template/admin_pages/packages/scan/items/setup/system.php:88
+msgid "PHP Max Execution Time"
+msgstr "PHP Max Execution Time"
+
+#: template/admin_pages/packages/scan/items/setup/system.php:69
+msgid "PHP Open Base Dir"
+msgstr "PHP Open Base Dir"
+
+#: template/admin_pages/packages/scan/items/database/mysqldump.php:24
+#: template/admin_pages/packages/scan/items/setup/hosting_status.php:20
+#: template/admin_pages/packages/scan/items/setup/hosting_status.php:34
+#: template/admin_pages/packages/scan/items/setup/hosting_status.php:61
+#: template/admin_pages/packages/scan/items/setup/hosting_status.php:66
+#: template/admin_pages/packages/scan/items/setup/parts/hosting_tooltip_memory.php:9
+#: template/admin_pages/packages/scan/items/setup/parts/hosting_tooltip_timeout.php:9
+#: template/admin_pages/packages/scan/items/setup/security.php:48
+#: template/admin_pages/packages/scan/scripts.php:889
+msgid "Good"
+msgstr "Dobré"
+
+#: template/parts/migration/clean-installation-files.php:114
+msgid "Security Notes"
+msgstr "Bezpečnostní poznámky"
+
+#: template/admin_pages/packages/scan/scripts.php:115
+msgid "No directories have been selected!"
+msgstr "Nebyly vybrány žádné adresáře!"
+
+#: template/admin_pages/packages/scan/scripts.php:85
+msgid "Directory applied filter set."
+msgstr "Sada adresářových filtrů."
+
+#: template/admin_pages/packages/scan/items/archive/files.php:165
+msgid "Copy the paths above and apply them as needed on Step 1 &gt; Archive &gt; Files section."
+msgstr "Zkopírujte výše uvedené cesty a aplikujte je dle potřeby v kroku 1&gt; sekce &gt; souborů archivu ."
+
+#: template/admin_pages/packages/scan/items/archive/files.php:154
+#: template/admin_pages/packages/scan/items/archive/files.php:161
+msgid "Click to Copy"
+msgstr "Kopírujte kliknutím"
+
+#: template/admin_pages/tools/general_validator.php:81
+msgid "Note: Symlinks are not discoverable on Windows OS with PHP"
+msgstr "Poznámka: Symbolické odkazy nejsou zjistitelné na OS Windows s PHP "
+
+#: template/admin_pages/packages/scan/items/database/tables.php:119
+msgid "2. Remove post revisions and stale data from tables.  Tables such as logs, statistical or other non-critical data should be cleared."
+msgstr "2. Odstraňte revize příspěvků a stažená data z tabulek. Tabulky a stejně tak logy, statistická nebo jiná nekritická data by měla být smazána."
+
+#: template/admin_pages/packages/scan/items/archive/files.php:58
+msgid "Timeout Options"
+msgstr "Volby timeoutů"
+
+#: src/Package/Create/BuildComponents.php:459
+#: template/admin_pages/packages/package_row_complete.php:57
+#: template/admin_pages/packages/package_row_incomplete.php:56
+#: template/admin_pages/packages/scan/items/archive/main.php:37
+#: template/parts/packages/filters/section_filters_subtab_filters_db.php:97
+msgid "Database Only"
+msgstr "Jen databáze"
+
+#: template/parts/migration/almost-complete.php:46
+#: template/parts/packages/notices/orphaned_packages.php:39
+msgid "Take me there now!"
+msgstr "Chci tam hned!"
+
+#: template/parts/migration/migration-message.php:75
+msgid "Remove Installation Files Now!"
+msgstr "Ihned odstranit instalační soubory!"
+
+#: src/Views/AdminNotices.php:742
+#: template/parts/migration/almost-complete.php:27
+msgid "Migration Almost Complete!"
+msgstr "Migrace skoro kompletní!"
+
+#: template/parts/migration/migration-message.php:32
+msgid "This site has been successfully migrated!"
+msgstr "Tento web byl úspěšně migrován!"
+
+#: src/Package/TraitPackageProgress.php:109
+#: template/admin_pages/packages/details/transfer.php:139
+#: template/admin_pages/settings/backup/processing_settings.php:20
+msgid "Processing"
+msgstr "Zpracování"
+
+#: src/Controllers/SettingsPageController.php:1074
+#: src/Core/Options/Rules/EncryptionRule.php:53
+#: src/Models/ActivityLog/LogEventBackupCreate.php:699
+#: src/Package/BuildRequirements.php:455 src/Views/AutoTunePageData.php:719
+#: template/admin_pages/packages/scan/items/database/tables.php:74
+#: template/admin_pages/packages/scan/items/database/tables.php:82
+#: template/admin_pages/packages/scan/items/setup/hosting_status.php:64
+#: template/admin_pages/settings/backup/advanced_settings.php:55
+#: template/admin_pages/settings/backup/detection_result_message.php:106
+msgid "Disabled"
+msgstr "Zakázáno"
+
+#: src/Package/BuildRequirements.php:452
+msgid "Suhosin Extension"
+msgstr "Rozšíření Suhosin"
+
+#: template/admin_pages/packages/scan/main.php:42
+msgid "This can take several minutes."
+msgstr "Tohle může pár minut trvat."
+
+#: template/admin_pages/packages/scan/main.php:41
+msgid "Keep this window open during the scan process."
+msgstr "Toho okno nechte otevřené v průběhu procesu skenování."
+
+#: template/parts/packages/filters/section_installer.php:254
+msgid "example: DatabaseUserName (value is optional)"
+msgstr "Příklad: DatabaseUserName (hodnota je volitelná)"
+
+#: template/parts/packages/filters/section_installer.php:103
+#: template/parts/packages/filters/section_installer.php:239
+msgid "example: DatabaseName (value is optional)"
+msgstr "Příklad: DatabaseName (hodnota je volitelná)"
+
+#: template/parts/packages/filters/section_installer.php:89
+#: template/parts/packages/filters/section_installer.php:224
+msgid "example: localhost (value is optional)"
+msgstr "Příklad: localhost (hodnota je volitelná)"
+
+#: template/admin_pages/tools/general_validator.php:22
+msgid "This will run the scan validation check.  This may take several minutes.  Do you want to Continue?"
+msgstr "Tímto se spustí sken kontroly validity. Může to trvat i několik minut. Chcete pokračovat?"
+
+#: template/admin_pages/tools/general_validator.php:21
+msgid "Run Validator"
+msgstr "Spustit validátor"
+
+#: template/admin_pages/packages/packages_scripts.php:55
+#: template/admin_pages/storages/storage_list.php:157
+msgid "Selection Required"
+msgstr "Výběr vyžadován"
+
+#: template/admin_pages/storages/storage_list.php:152
+msgid "Please select an action from the \"Bulk Actions\" drop down menu!"
+msgstr "Vyberte akci z rozbalovacího menu \"Hromadné akce\"!"
+
+#: template/admin_pages/packages/packages_scripts.php:48
+#: template/admin_pages/storages/storage_list.php:151
+msgid "Bulk Action Required"
+msgstr "Hromadná akce vyžadována"
+
+#: src/Models/ActivityLog/LogEventWebsitesScan.php:252
+#: template/admin_pages/packages/scan/items/database/main.php:40
+msgid "Database Size:"
+msgstr "Velikost databáze:"
+
+#: template/admin_pages/packages/scan/items/archive/main.php:45
+msgid "File Size:"
+msgstr "Velikost souboru:"
+
+#: template/admin_pages/packages/scan/items/setup/wordpress.php:84
+msgid "Multisite: N/A"
+msgstr "Síť webů: Nedostupné"
+
+#: src/Views/UI/UiDialog.php:67
+#: template/admin_pages/packages/remote_download/remote_download_options.php:60
+#: template/admin_pages/packages/remote_download/remote_restore_options.php:60
+#: template/admin_pages/settings/migrate_settings/export.php:63
+#: template/admin_pages/settings/migrate_settings/import.php:117
+#: template/admin_pages/storages/storage_scripts.php:23
+#: template/admin_pages/tools/auto_tune/start_dialog.php:93
+msgid "Cancel"
+msgstr "Storno"
+
+#: src/Views/UI/UiDialog.php:66
+msgid "OK"
+msgstr "OK"
+
+#: src/Views/UI/UiDialog.php:63
+msgid "Processing please wait..."
+msgstr "Zpracovávám, čekejte..."
+
+#. Description of the plugin
+#: duplicator.php
+msgid "Migrate and backup a copy of your WordPress files and database. Duplicate and move a site from one location to another quickly."
+msgstr "Migrujte a zálohujte kopii vašich WordPress souborů a databáze. Rychle duplikujte a přemisťujte weby z jednoho umístění na jiné."
+
+#: template/admin_pages/tools/duplicator_logs.php:228
+msgid "Top 20"
+msgstr "Horních 20"
+
+#: template/admin_pages/settings/backup/installer_settings.php:38
+msgid "recommended"
+msgstr "doporučeno"
+
+#: template/admin_pages/packages/screen_options.php:96
+msgid "Created Format"
+msgstr "Vytvořený formát"
+
+#: src/Core/Options/Rules/DbDumpEngineRule.php:52
+msgid "Mysqldump"
+msgstr "Mysqldump"
+
+#: template/admin_pages/settings/general/debug_settings.php:22
+msgid "Debug"
+msgstr "Odladit"
+
+#: template/admin_pages/tools/general_validator.php:124
+msgid "Scanning Environment... This may take a few minutes."
+msgstr "Skenuji prostředí... to může pár minut trvat."
+
+#: template/admin_pages/tools/general_validator.php:37
+#: template/admin_pages/tools/general_validator.php:145
+msgid "Run Scan Integrity Validation"
+msgstr "Spustit sken ověření integrity"
+
+#: template/admin_pages/tools/general_validator.php:29
+msgid "Scan Validator"
+msgstr "Validátor skenu"
+
+#: template/admin_pages/packages/scan/error_message.php:19
+msgid "2. Continue to add/remove filters to isolate which path is causing issues."
+msgstr "2. Pokračujte přidáním/odebráním filtrů k izolování cesty, která působí potíže."
+
+#: template/admin_pages/packages/scan/error_message.php:20
+msgid "3. This message will go away once the correct filters are applied."
+msgstr "3. Tato zpráva zmizí, jakmile aplikujete správné filtry."
+
+#: template/admin_pages/packages/scan/error_message.php:22
+msgid "Common Issues:"
+msgstr "Běžné potíže:"
+
+#: addons/litebase/src/Utils/ExtraPlugins/ExtraPluginsMng.php:125
+msgid "OptinMonster"
+msgstr "OptinMonster"
+
+#: template/admin_pages/packages/scan/items/archive/multisite.php:53
+msgid "Tables:"
+msgstr "Tabulky:"
+
+#: template/admin_pages/packages/scan/items/archive/files.php:44
+#: template/admin_pages/packages/scan/items/database/tables.php:29
+msgid "Overview"
+msgstr "Přehled"
+
+#: template/admin_pages/packages/row_parts/package_progress_error.php:26
+msgid "Error Processing"
+msgstr "Zpracování chyb"
+
+#: template/parts/packages/filters/mysqldump_compatibility_mode.php:95
+msgid "no_field_options"
+msgstr "no_field_options"
+
+#: template/parts/packages/filters/mysqldump_compatibility_mode.php:86
+msgid "no_key_options"
+msgstr "no_key_options"
+
+#: template/parts/packages/filters/mysqldump_compatibility_mode.php:77
+msgid "no_table_options"
+msgstr "no_table_options"
+
+#: template/parts/packages/filters/mysqldump_compatibility_mode.php:68
+msgid "mysql40"
+msgstr "mysql40"
+
+#: template/parts/packages/filters/mysqldump_compatibility_mode.php:30
+msgid "Compatibility Mode"
+msgstr "Režim kompatibility"
+
+#: addons/litebase/template/litebase/dashboard/recommended-plugin.php:42
+msgid "Learn More"
+msgstr "Dozvědět se víc"
+
+#: template/admin_pages/packages/details/transfer.php:46
+msgid "Manual Transfer"
+msgstr "Ruční přenos"
+
+#: template/admin_pages/packages/details/parts/prefills_card.php:21
+msgid "- not set -"
+msgstr "- nenastaveno -"
+
+#: template/parts/packages/filters/package_components.php:116
+msgid "File Filters:"
+msgstr "Filtry souborů:"
+
+#: template/admin_pages/packages/details/parts/files_card.php:122
+msgid "Extensions"
+msgstr "Přípony"
+
+#: template/admin_pages/packages/details/parts/files_card.php:132
+#: template/admin_pages/packages/details/parts/filter_group.php:26
+msgid "- no filters -"
+msgstr "- žádné filtry -"
+
+#: template/admin_pages/packages/details/parts/database_card.php:72
+#: template/admin_pages/packages/details/parts/files_card.php:76
+msgid "Filters"
+msgstr "Filtry"
+
+#: src/Core/Options/Rules/ArchiveEngineRule.php:55
+msgid "ZipArchive"
+msgstr "ZipArchive"
+
+#: src/Package/BuildRequirements.php:179
+#: template/admin_pages/packages/details/parts/general_card.php:184
+msgid "PHP"
+msgstr "PHP"
+
+#: template/admin_pages/packages/details/transfer.php:179
+#: template/admin_pages/packages/packages_table_head.php:49
+#: template/admin_pages/tools/auto_tune/sidebar.php:15
+msgid "Status"
+msgstr "Stav"
+
+#: template/admin_pages/packages/details/parts/general_card.php:203
+msgid "error running"
+msgstr "chyba spuštění"
+
+#: template/admin_pages/packages/details/parts/general_card.php:198
+msgid "Runtime"
+msgstr "Čas spuštění"
+
+#: template/admin_pages/packages/details/parts/general_card.php:188
+msgid "Mysql"
+msgstr "Mysql"
+
+#: template/admin_pages/packages/details/parts/general_card.php:58
+msgid "- unknown -"
+msgstr "- neznámý -"
+
+#: template/admin_pages/packages/details/parts/general_card.php:305
+msgid "- no notes -"
+msgstr "- žádné poznámky -"
+
+#: template/admin_pages/packages/details/parts/general_card.php:130
+msgid "ID"
+msgstr "ID"
+
+#: src/Models/ActivityLog/LogEventBackupCreate.php:257
+#: template/admin_pages/packages/details/details_header.php:43
+#: template/admin_pages/packages/details/details_wpbody_header.php:49
+#: template/admin_pages/packages/details/parts/general_card.php:74
+msgid "Transfer"
+msgstr "Přenos"
+
+#: addons/litebase/installer/litebase/src/EducationStrings.php:89
+#: addons/litebase/template/litebase/scan/education-box.php:32
+msgid "Email Alerts"
+msgstr "Oznámení e-mailem"
+
+#: addons/litebase/template/litebase/about-us/lite-vs-pro/main.php:50
+msgid "Feature"
+msgstr "Funkce"
+
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: duplicator.php src/Views/DashboardWidget.php:46
+#: template/admin_pages/packages/details/parts/general_card.php:171
+#: template/admin_pages/packages/row_parts/details_package.php:96
+msgid "Duplicator"
+msgstr "Duplicator"
+
+#: template/admin_pages/tools/duplicator_logs.php:199
+#: template/admin_pages/tools/php_logs.php:185
+msgid "Auto Refresh"
+msgstr "Auto obnovení"
+
+#: template/admin_pages/tools/duplicator_logs.php:195
+#: template/admin_pages/tools/php_logs.php:181
+msgid "Refresh"
+msgstr "Obnovit"
+
+#: template/admin_pages/tools/duplicator_logs.php:181
+#: template/admin_pages/tools/duplicator_logs.php:188
+#: template/admin_pages/tools/php_logs.php:103
+#: template/admin_pages/tools/php_logs.php:154
+msgid "Options"
+msgstr "Možnosti"
+
+#: template/admin_pages/tools/duplicator_logs.php:143
+msgid "Reasons for log file not showing"
+msgstr "Důvody, proč se nemusí zobrazit soubor s historií (Log)"
+
+#: src/Package/BuildRequirements.php:233
+msgid "Server Disk"
+msgstr "Disk serveru"
+
+#: src/Package/BuildRequirements.php:495
+msgid "Max Allowed Packets"
+msgstr "Max. povolených paketů"
+
+#: src/Package/BuildRequirements.php:489
+msgid "Wait Timeout"
+msgstr "Časový limit pro čekání"
+
+#: template/admin_pages/settings/backup/backup_settings.php:37
+#: template/admin_pages/settings/general/general.php:39
+#: template/admin_pages/settings/storage/storage_settings.php:36
+msgid "Save Settings"
+msgstr "Uložit nastavení"
+
+#: src/Package/BuildRequirements.php:274
+msgid "Timezone"
+msgstr "Časové pásmo"
+
+#: template/admin_pages/packages/scan/main.php:115
+#: template/admin_pages/packages/scan/validation_error.php:40
+msgid "Back"
+msgstr "Zpět"
+
+#: template/admin_pages/packages/setup/setup_page.php:94
+msgid "Next"
+msgstr "Další"
+
+#: src/Package/BuildRequirements.php:447
+msgid "Shell Exec Zip"
+msgstr "Shell Exec Zip"
+
+#: src/Package/BuildRequirements.php:432 src/Package/BuildRequirements.php:438
+#: src/Package/BuildRequirements.php:444 src/Package/BuildRequirements.php:449
+msgid "Not Supported"
+msgstr "Není podporován"
+
+#: src/Package/BuildRequirements.php:432 src/Package/BuildRequirements.php:438
+#: src/Package/BuildRequirements.php:444 src/Package/BuildRequirements.php:449
+msgid "Is Supported"
+msgstr "Je podporován"
+
+#: src/Models/ActivityLog/LogEventBackupCreate.php:400
+msgid "Shell Exec"
+msgstr "Shell Exec"
+
+#: src/Package/BuildRequirements.php:402
+msgid "Memory In Use"
+msgstr "Využitá paměť"
+
+#: src/Package/BuildRequirements.php:360 src/Package/BuildRequirements.php:396
+msgid "Memory Limit"
+msgstr "Limit paměti"
+
+#: src/Controllers/SettingsPageController.php:369
+#: src/Controllers/SettingsPageController.php:875
+#: src/Controllers/SettingsPageController.php:999
+#: src/Core/Options/Rules/CompressionRule.php:48
+#: src/Package/BuildRequirements.php:426 src/Views/AutoTunePageData.php:752
+#: template/admin_pages/packages/details/parts/database_card.php:74
+#: template/admin_pages/packages/details/parts/files_card.php:78
+#: template/admin_pages/packages/details/parts/prefills_card.php:46
+#: template/admin_pages/settings/backup/installer_settings.php:125
+#: template/admin_pages/settings/backup/processing_settings.php:36
+#: template/admin_pages/settings/general/debug_settings.php:34
+msgid "Off"
+msgstr "Vypnuto"
+
+#: src/Controllers/SettingsPageController.php:370
+#: src/Core/Options/Rules/CompressionRule.php:48
+#: template/admin_pages/packages/details/parts/database_card.php:74
+#: template/admin_pages/packages/details/parts/files_card.php:78
+#: template/admin_pages/packages/details/parts/prefills_card.php:46
+#: template/admin_pages/settings/general/debug_settings.php:37
+msgid "On"
+msgstr "Zapnuto"
+
+#: src/Package/BuildRequirements.php:355 src/Package/BuildRequirements.php:484
+msgid "Charset"
+msgstr "Sada znaků"
+
+#: src/Package/BuildRequirements.php:350
+msgid "Language"
+msgstr "Jazyk"
+
+#: src/Package/BuildRequirements.php:314
+msgid "Client IP"
+msgstr "IP klienta"
+
+#: src/Package/BuildRequirements.php:304
+msgid "Server IP"
+msgstr "IP serveru"
+
+#: src/Package/BuildRequirements.php:299
+msgid "Loaded PHP INI"
+msgstr "Nahráno PHP INI"
+
+#: src/Package/BuildRequirements.php:289
+msgid "Server Time"
+msgstr "Čas serveru"
+
+#: src/Package/BuildRequirements.php:269
+msgid "Operating System"
+msgstr "Operační systrém"
+
+#: src/Package/BuildRequirements.php:255 src/Package/BuildRequirements.php:324
+msgid "Duplicator Version"
+msgstr "Verze pluginu Duplicator"
+
+#: template/admin_pages/tools/server_info.php:22
+msgid "Server Settings"
+msgstr "Nastavení serveru"
+
+#: template/admin_pages/tools/general.php:236
+msgid "Removes all build data from:"
+msgstr "Odstraní všechna data sestavení z:"
+
+#: template/admin_pages/tools/general.php:232
+msgid "Clear Build Cache"
+msgstr "Vyčistit cache sestavení"
+
+#: template/admin_pages/diagnostics/clean_tmp_cache_message.php:31
+msgid "Build cache removed."
+msgstr "Cache sestavení byla odstraněna."
+
+#: template/admin_pages/settings/storage/storage_general.php:46
+msgid "Disable if issues occur when downloading installer/archive files."
+msgstr "Zakázat v případě problémů při stahování souborů instalátoru/archivu."
+
+#: template/admin_pages/settings/general/plugin_settings.php:34
+msgid "Uninstall"
+msgstr "Odinstalovat"
+
+#: template/admin_pages/settings/general/plugin_settings.php:22
+msgid "Plugin"
+msgstr "Plugin"
+
+#: template/admin_pages/settings/backup/detection_result_message.php:12
+msgid "Settings Saved"
+msgstr "Nastavení uloženo"
+
+#: src/Controllers/SettingsPageController.php:91
+#: src/Controllers/ToolsPageController.php:227
+#: src/Models/ActivityLog/LogEventSettingsChange.php:257
+#: src/Package/BuildRequirements.php:167
+#: template/admin_pages/packages/details/parts/general_card.php:84
+#: template/admin_pages/packages/setup/setup_page.php:44
+msgid "General"
+msgstr "Obecné"
+
+#: template/admin_pages/packages/scan/items/archive/files_db_only.php:17
+#: template/admin_pages/packages/scan/items/archive/files_skip_scan.php:17
+#: template/admin_pages/packages/scan/items/database/mysqldump.php:26
+#: template/admin_pages/packages/scan/items/setup/security.php:50
+#: template/admin_pages/packages/scan/scripts.php:890
+msgid "Notice"
+msgstr "Upozornění"
+
+#: template/admin_pages/packages/scan/scripts.php:774
+msgid "Unable to report on database stats"
+msgstr "Nelze vytvořit report pro statistiky DB"
+
+#: template/admin_pages/packages/scan/scripts.php:746
+msgid "Unable to report on any tables"
+msgstr "Nelze vytvořit report pro žádnou tabulku"
+
+#: template/admin_pages/packages/scan/main.php:120
+msgid "Rescan"
+msgstr "Přeskenovat"
+
+#: template/admin_pages/packages/scan/main.php:75
+#: template/admin_pages/packages/scan/validation_error.php:30
+msgid "Error Message:"
+msgstr "Chybová hláška:"
+
+#: template/admin_pages/packages/scan/main.php:73
+#: template/admin_pages/packages/scan/validation_error.php:28
+msgid "Server Status:"
+msgstr "Stav serveru:"
+
+#: template/admin_pages/packages/scan/main.php:71
+#: template/admin_pages/packages/scan/scripts.php:631
+#: template/admin_pages/packages/scan/validation_error.php:26
+msgid "Please try again!"
+msgstr "Prosím, zkuste to znovu!"
+
+#: src/Models/ActivityLog/LogEventWebsitesScan.php:399
+#: template/admin_pages/packages/scan/main.php:69
+#: template/admin_pages/packages/scan/scripts.php:630
+msgid "Scan Error"
+msgstr "Chyba skenu"
+
+#: template/admin_pages/packages/scan/main.php:89
+msgid "Scan checks are not required to pass, however they could cause issues on some systems."
+msgstr "Kontroly skenu nemusí být splněny bez závad, ale mohou představovat problém pro některé systémy."
+
+#: src/Models/Storages/Local/LocalStorage.php:238
+msgid "Name:"
+msgstr "Název:"
+
+#: template/admin_pages/packages/scan/items/database/tables.php:36
+msgid "Records"
+msgstr "Záznamy"
+
+#: template/admin_pages/packages/details/parts/database_card.php:82
+#: template/admin_pages/packages/row_parts/details_package.php:153
+#: template/admin_pages/packages/scan/items/database/tables.php:35
+msgid "Tables"
+msgstr "Tabulky"
+
+#: src/Models/ActivityLog/LogEventBackupCreate.php:850
+msgid "Excluded Directories"
+msgstr "Vyloučené složky"
+
+#: template/admin_pages/packages/scan/items/archive/files.php:77
+msgid "Large Files"
+msgstr "Velké soubory"
+
+#: src/Controllers/SettingsPageController.php:1075
+#: src/Core/Options/Rules/EncryptionRule.php:53
+#: src/Models/ActivityLog/LogEventBackupCreate.php:699
+#: src/Models/ActivityLog/LogEventBackupCreate.php:924
+#: src/Package/BuildRequirements.php:455 src/Views/AutoTunePageData.php:719
+#: template/admin_pages/packages/scan/items/archive/main.php:39
+#: template/admin_pages/packages/scan/items/database/main.php:35
+#: template/admin_pages/packages/scan/items/database/tables.php:73
+#: template/admin_pages/packages/scan/items/database/tables.php:81
+#: template/admin_pages/packages/scan/items/setup/hosting_status.php:64
+#: template/admin_pages/settings/backup/advanced_settings.php:58
+#: template/admin_pages/settings/backup/detection_result_message.php:106
+msgid "Enabled"
+msgstr "Povoleno"
+
+#: template/admin_pages/packages/scan/items/setup/wordpress.php:25
+msgid "Core Files"
+msgstr "Soubory jádra"
+
+#: src/Package/BuildRequirements.php:345
+#: template/admin_pages/packages/scan/items/setup/wordpress.php:24
+msgid "WordPress Version"
+msgstr "Verze WordPress"
+
+#: src/Package/BuildRequirements.php:173
+#: template/admin_pages/packages/details/parts/environment_card.php:32
+#: template/admin_pages/packages/details/parts/general_card.php:182
+#: template/admin_pages/packages/row_parts/details_package.php:92
+#: template/admin_pages/packages/scan/items/setup/wordpress.php:19
+msgid "WordPress"
+msgstr "WordPress"
+
+#: src/Package/BuildRequirements.php:407
+msgid "Max Execution Time"
+msgstr "Max. čas provádění"
+
+#: template/admin_pages/packages/scan/items/setup/system.php:49
+#: template/admin_pages/packages/scan/items/setup/system.php:81
+#: template/admin_pages/packages/scan/items/setup/system.php:106
+#: template/admin_pages/packages/scan/items/setup/wordpress.php:89
+msgid "details"
+msgstr "detaily"
+
+#: src/Package/BuildRequirements.php:294
+#: template/admin_pages/packages/scan/items/setup/system.php:36
+msgid "Web Server"
+msgstr "Webový server"
+
+#: template/admin_pages/tools/general.php:64
+msgid "Diagnostic"
+msgstr "Diagnostiky"
+
+#: src/Views/AutoTunePageData.php:284
+msgid "Server"
+msgstr "Server"
+
+#: template/admin_pages/packages/scan/main.php:52
+msgid "Process Time:"
+msgstr "Čas zpracování:"
+
+#: template/admin_pages/packages/scan/main.php:49
+msgid "Scan Complete"
+msgstr "Sken kompletní"
+
+#: template/admin_pages/packages/scan/main.php:40
+#: template/admin_pages/packages/setup/setup_page.php:122
+msgid "Please Wait..."
+msgstr "Prosím, čekejte..."
+
+#: template/admin_pages/packages/scan/main.php:32
+msgid "Scanning Site"
+msgstr "Skenuji web"
+
+#: template/admin_pages/activity_log/parts/toolbar.php:84
+#: template/admin_pages/packages/setup/setup_page.php:88
+msgid "Reset"
+msgstr "Vynulovat"
+
+#: template/admin_pages/settings/storage/storage_ssl.php:19
+msgid "SSL"
+msgstr "SSL"
+
+#: src/Package/BuildRequirements.php:319
+#: template/admin_pages/packages/details/parts/prefills_card.php:39
+#: template/admin_pages/packages/details/parts/prefills_card.php:47
+#: template/parts/packages/filters/section_installer.php:81
+#: template/parts/packages/filters/section_installer.php:156
+#: template/parts/packages/filters/section_installer.php:215
+msgid "Host"
+msgstr "Hosting"
+
+#: template/admin_pages/packages/scan/main.php:91
+msgid "Please review the details for each section by clicking on the detail title."
+msgstr "Překontrolujte si detaily pro každou sekci kliknutím na nápis detaily."
+
+#: src/Models/ActivityLog/LogEventBackupDelete.php:135
+#: template/admin_pages/packages/details/detail.php:29
+#: template/admin_pages/packages/details/parts/general_card.php:110
+#: template/admin_pages/packages/row_parts/details_package.php:82
+#: template/admin_pages/packages/toolbar.php:29
+#: template/admin_pages/storages/storage_list.php:66
+#: template/admin_pages/storages/storage_list_row.php:92
+msgid "Delete"
+msgstr "Smazat"
+
+#: src/Package/BuildRequirements.php:391
+#: template/admin_pages/packages/details/parts/prefills_card.php:41
+#: template/admin_pages/packages/details/parts/prefills_card.php:48
+#: template/admin_pages/settings/backup/advanced_settings.php:147
+#: template/parts/packages/filters/section_installer.php:109
+#: template/parts/packages/filters/section_installer.php:169
+#: template/parts/packages/filters/section_installer.php:244
+msgid "User"
+msgstr "Uživatel"
+
+#: template/admin_pages/activity_log/log_list.php:39
+#: template/admin_pages/activity_log/log_list.php:64
+#: template/admin_pages/activity_log/parts/sub_table_mini.php:29
+#: template/admin_pages/packages/details/parts/general_card.php:225
+#: template/admin_pages/packages/details/transfer.php:180
+#: template/admin_pages/storages/storage_edit.php:101
+#: template/admin_pages/storages/storage_list.php:105
+#: template/admin_pages/storages/storage_list_row.php:136
+#: template/admin_pages/tools/php_logs.php:111
+#: template/parts/storage/select_list.php:31
+msgid "Type"
+msgstr "Typ"
+
+#: template/parts/packages/filters/package_components.php:171
+#: template/parts/packages/filters/package_components.php:173
+msgid "File Extensions"
+msgstr "Přípony souborů"
+
+#: template/parts/packages/filters/package_components.php:164
+msgid "cache"
+msgstr "cache"
+
+#: template/parts/packages/filters/package_components.php:155
+msgid "root path"
+msgstr "cesta ke kořenové složce"
+
+#: template/admin_pages/packages/details/parts/files_card.php:86
+#: template/admin_pages/packages/scan/items/archive/files.php:151
+msgid "Directories"
+msgstr "Adresáře"
+
+#: src/Package/Create/BuildComponents.php:406
+#: template/admin_pages/packages/details/parts/database_card.php:31
+#: template/admin_pages/packages/details/parts/database_card.php:63
+#: template/admin_pages/packages/details/parts/general_card.php:72
+#: template/admin_pages/packages/details/parts/prefills_card.php:40
+#: template/admin_pages/packages/scan/items/database/main.php:25
+#: template/admin_pages/settings/backup/database_settings.php:36
+#: template/parts/packages/filters/section_installer.php:95
+#: template/parts/packages/filters/section_installer.php:229
+msgid "Database"
+msgstr "Databáze"
+
+#: template/admin_pages/packages/details/parts/files_card.php:39
+#: template/admin_pages/packages/details/parts/files_card.php:104
+#: template/admin_pages/packages/details/parts/general_card.php:73
+#: template/admin_pages/packages/row_parts/details_package.php:136
+#: template/admin_pages/packages/scan/items/archive/files.php:30
+#: template/admin_pages/packages/scan/items/archive/files.php:158
+#: template/admin_pages/packages/scan/items/archive/main.php:33
+msgid "Files"
+msgstr "Soubory"
+
+#: src/Models/Storages/Local/LocalStorage.php:169
+msgid "Local"
+msgstr "Lokální"
+
+#: src/Models/Storages/Local/DefaultLocalStorage.php:24
+#: src/Models/TemplateEntity.php:292
+#: template/admin_pages/storages/storage_edit.php:72
+#: template/parts/packages/filters/section_installer.php:197
+msgid "Default"
+msgstr "Výchozí"
+
+#: src/Models/Storages/AbstractStorageEntity.php:1162
+#: template/admin_pages/storages/configs/local_default.php:25
+#: template/admin_pages/storages/storage_list.php:106
+#: template/parts/storage/select_list.php:32
+msgid "Location"
+msgstr "Umístění"
+
+#: src/Controllers/SettingsPageController.php:93
+#: src/Controllers/StoragePageController.php:35
+#: src/Controllers/StoragePageController.php:36
+#: src/Controllers/StoragePageController.php:61
+#: src/Models/ActivityLog/LogEventSettingsChange.php:259
+#: template/admin_pages/packages/details/transfer.php:102
+#: template/admin_pages/packages/setup/section_storages.php:21
+#: template/admin_pages/settings/migrate_settings/import.php:61
+#: template/admin_pages/settings/storage/storage_general.php:25
+#: template/mail/email_summary.php:141
+msgid "Storage"
+msgstr "Úložiště"
+
+#: template/admin_pages/packages/setup/section-requirements.php:112
+msgid "For additional help please see the "
+msgstr "Pro další pomoc, prosím, čtěte"
+
+#: template/parts/requirements/installer_files_fix_hint.php:40
+msgid "Remove Files Now"
+msgstr "Odstranit soubory nyní"
+
+#: src/Package/BuildRequirements.php:381
+msgid "PHP Version"
+msgstr "Verze PHP"
+
+#: template/admin_pages/packages/setup/section-requirements.php:38
+msgid "System requirements must pass for the Duplicator to work properly.  Click each link for details."
+msgstr "Systémové požadavky musí být splněny, aby Duplicator pracoval správně. Pro detaily klikněte na každý z odkazů."
+
+#: template/admin_pages/packages/setup/section-requirements.php:29
+#: template/admin_pages/packages/setup/section-requirements.php:32
+msgid "Requirements:"
+msgstr "Požadavky:"
+
+#: src/Models/ActivityLog/LogEventWebsitesScan.php:175
+#: src/Models/ActivityLog/LogEventWebsitesScan.php:405
+#: template/admin_pages/packages/details/parts/general_card.php:71
+msgid "Scan"
+msgstr "Sken"
+
+#: template/admin_pages/packages/scan/items/setup/main.php:17
+msgid "Setup"
+msgstr "Příprava"
+
+#: template/admin_pages/packages/details/parts/general_card.php:300
+#: template/admin_pages/packages/setup/section_notes.php:16
+#: template/admin_pages/storages/storage_edit.php:95
+#: template/admin_pages/storages/storage_list_row.php:132
+msgid "Notes"
+msgstr "Poznámky"
+
+#: template/admin_pages/packages/details/parts/general_card.php:131
+msgid "Hash"
+msgstr "Hash"
+
+#: src/Package/BuildRequirements.php:479
+#: template/admin_pages/settings/general/plugin_settings.php:27
+msgid "Version"
+msgstr "Verze"
+
+#: template/admin_pages/packages/details/parts/general_card.php:132
+#: template/admin_pages/packages/row_parts/details_package.php:130
+#: template/admin_pages/packages/row_parts/download_buttons.php:83
+#: template/admin_pages/packages/scan/items/archive/main.php:23
+#: template/admin_pages/settings/backup/archive_settings.php:32
+msgid "Archive"
+msgstr "Archiv"
+
+#: template/admin_pages/packages/row_parts/download_buttons.php:72
+#: template/parts/packages/filters/section_installer.php:34
+msgid "Installer"
+msgstr "Instalátor"
+
+#: addons/dupcloudaddon/template/dupcloudaddon/connect/storage_auth.php:102
+#: template/admin_pages/packages/details/parts/general_card.php:118
+#: template/admin_pages/packages/packages_table_head.php:40
+#: template/admin_pages/settings/backup/installer_settings.php:26
+#: template/admin_pages/storages/storage_edit.php:68
+#: template/admin_pages/storages/storage_list.php:104
+#: template/admin_pages/storages/storage_list_row.php:128
+#: template/parts/storage/select_list.php:30
+msgid "Name"
+msgstr "Název"
+
+#: template/admin_pages/packages/packages_table_head.php:57
+#: template/admin_pages/packages/scan/items/archive/files.php:29
+#: template/admin_pages/packages/scan/items/archive/files.php:119
+#: template/admin_pages/packages/scan/items/database/tables.php:34
+#: template/admin_pages/packages/screen_options.php:48
+msgid "Size"
+msgstr "Velikost"
+
+#: template/admin_pages/packages/details/parts/general_card.php:139
+#: template/admin_pages/packages/packages_table_head.php:60
+#: template/admin_pages/packages/screen_options.php:60
+msgid "Created"
+msgstr "Vytvořeno"
+
+#: template/admin_pages/activity_log/parts/table_row.php:52
+#: template/admin_pages/packages/details/details_header.php:34
+#: template/admin_pages/packages/details/details_wpbody_header.php:38
+#: template/admin_pages/packages/details/transfer.php:51
+msgid "Details"
+msgstr "Detaily"
+
+#: template/parts/DashboardWidget/package-create-section.php:54
+msgid "Create New"
+msgstr "Vytvořit nový"
+
+#: template/admin_pages/packages/toolbar.php:37
+#: template/admin_pages/storages/parts/edit_toolbar.php:91
+#: template/admin_pages/storages/storage_list.php:74
+#: template/parts/notices/fix_group.php:126
+msgid "Apply"
+msgstr "Provést"
+
+#: template/admin_pages/packages/toolbar.php:25
+#: template/admin_pages/storages/storage_list.php:62
+msgid "Bulk Actions"
+msgstr "Hromadné akce"
+
+#: template/parts/migration/clean-installation-files.php:136
+msgid "Help Support Duplicator"
+msgstr "Centrum podpory Duplicator"
+
+#: addons/litebase/src/Controllers/LiteToolsController.php:125
+msgid "Change Log"
+msgstr "Historie verzí"
+
+#: addons/litebase/src/Controllers/LiteToolsController.php:121
+msgid "FAQs"
+msgstr "Často kladené otázky"
+
+#: addons/litebase/src/Controllers/LiteToolsController.php:117
+msgid "User Guide"
+msgstr "Manuál"
+
+#: addons/litebase/src/Controllers/LiteToolsController.php:113
+msgid "Quick Start"
+msgstr "Rychle začít"
+
+#: addons/litebase/template/litebase/tools/support.php:32
+msgid "Knowledgebase"
+msgstr "Znalostní báze"
+
+#: addons/litebase/installer/litebase/src/EducationStrings.php:78
+#: addons/litebase/src/Controllers/AboutUsPageController.php:156
+#: addons/litebase/src/Controllers/WelcomePageController.php:146
+#: addons/litebase/template/litebase/scan/education-box.php:19
+msgid "Scheduled Backups"
+msgstr "Plánované zálohování"
+
+#: addons/litebase/src/Controllers/AboutUsPageController.php:139
+msgid "Migration Wizard"
+msgstr "Migrační asistent"
+
+#: addons/litebase/src/Controllers/AboutUsPageController.php:131
+msgid "Backup Files & Database"
+msgstr "Zálohovat soubory & databázi"
+
+#: src/Core/Bootstrap.php:671
+msgid "Manage"
+msgstr "Spravovat"
+
+#: src/Controllers/ToolsPageController.php:67
+#: src/Controllers/ToolsPageController.php:68
+msgid "Tools"
+msgstr "Nástroje"
+
+#: src/Controllers/SettingsPageController.php:71
+#: src/Controllers/SettingsPageController.php:72
+#: template/admin_pages/settings/general/advanced_settings.php:31
+#: template/admin_pages/settings/migrate_settings/import.php:86
+msgid "Settings"
+msgstr "Nastavení"
+
+#: src/Core/Bootstrap.php:691 template/parts/admin-logo-header.php:20
+msgid "Help"
+msgstr "Nápověda"
+
+#: src/Core/Bootstrap.php:691
+msgid "Get Help"
+msgstr "Získat pomoc"
+
+#: src/Core/Controllers/AbstractSinglePageController.php:390
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Nemáte dostatečná oprávnění k přístupu na tuto stránku."
+
+#: src/Package/Create/BuildComponents.php:418
+msgid "Media"
+msgstr "Média"
+
+#: src/Views/PluginFooter.php:155
+msgid "View"
+msgstr "Zobrazit"
