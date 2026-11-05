@@ -2,6 +2,8 @@ wp-config.php
 wp-config-ddev.php
 wp-content/uploads/
 wp-content/cache/
+wp-content/wp-cache-config.php
+wp-content/upgrade/
 *.sql
 *.sql.gz
 *.mysql
