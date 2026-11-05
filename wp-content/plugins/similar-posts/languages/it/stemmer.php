@@ -328,7 +328,7 @@ if (!function_exists('strpbrk')) {
         $strlen = strlen($char_list);
         $found = false;
         for( $i=0; $i<$strlen; $i++ ) {
-            if( ($tmp = strpos($haystack, $char_list{$i})) !== false ) {
+            if( ($tmp = strpos($haystack, $char_list[$i])) !== false ) {
                 if(!$found) {
                     $pos = $tmp;
                     $found = true;

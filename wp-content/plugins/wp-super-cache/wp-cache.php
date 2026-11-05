@@ -86,7 +86,7 @@ function is_writeable_ACLSafe($path) {
 
 	// PHP's is_writable does not work with Win32 NTFS
 
-	if ($path{strlen($path)-1}=='/') // recursively return a temporary file path
+	if ($path[strlen($path)-1]=='/') // recursively return a temporary file path
 		return is_writeable_ACLSafe($path.uniqid(mt_rand()).'.tmp');
 	else if (is_dir($path))
 		return is_writeable_ACLSafe($path.'/'.uniqid(mt_rand()).'.tmp');
@@ -3359,7 +3359,7 @@ add_filter( 'option_preload_cache_counter', 'option_preload_cache_counter' );
 
 function check_up_on_preloading() {
 	$value = get_option( 'preload_cache_counter' );
-	if ( $value[ 'c' ] > 0 && ( time() - $value[ 't' ] ) > 3600 && false == wp_next_scheduled( 'wp_cache_preload_hook' ) ) {
+	if ( is_array( $value ) && isset( $value['c'], $value['t'] ) && $value['c'] > 0 && ( time() - $value['t'] ) > 3600 && false == wp_next_scheduled( 'wp_cache_preload_hook' ) ) {
 		if ( is_admin() )
 			wp_mail( get_option( 'admin_email' ), sprintf( __( '[%s] Preload may have stalled.', 'wp-super-cache' ), get_bloginfo( 'url' ) ), sprintf( __( "Preload has been restarted.\n%s", 'wp-super-cache' ), admin_url( "options-general.php?page=wpsupercache" ) ) );
 		wp_schedule_single_event( time() + 30, 'wp_cache_preload_hook' );

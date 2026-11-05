@@ -9,11 +9,12 @@ Version: 0.1
 Author URI: http://www.separatista.net
 */
 
-function right_czech($output)
+function right_czech($output, $number = null)
 
 {
-   $number = get_comments_number($id);
-	 
+   if($number === null)
+      $number = get_comments_number();
+
    if($number == NULL)
    return $output;
 

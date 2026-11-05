@@ -164,7 +164,7 @@
 					If you are not satisfied with the order, drag those parts to desired one.
 				</p>
 
-				<? if ( $first_view == true ): ?>
+				<?php if ( $first_view == true ): ?>
 				<p style="color: red">It looks like something has gone wrong with plugin settings. Default options are here, just hit the blue button to save them.</p>
 				<?php endif; ?>
 
